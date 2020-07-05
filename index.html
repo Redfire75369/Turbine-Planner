@@ -5,13 +5,32 @@
 		<title>NuclearCraft: Overhauled Turbine Planner</title>
 		<link rel="stylesheet" href="stylesheets/universal.css"/>
 
-    <script defer src="javascripts/TurbineBlade.js" charset="utf-8" type="text/javascript"></script>
+    <script defer src="javascripts/blades.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/userinterface.js" charset="utf-8" type="text/javascript"></script>
+		<script defer src="javascripts/calculations.js" charset="utf-8" type="text/javascript"></script>
+		<script defer src="javascripts/navigation.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/main.js" charset="utf-8" type="text/javascript"></script>
   </head>
   <body>
-		<div id="blades">
+		<div id="navigation">
 			<div class="flex__row">
+				<div class="flex__col"><button onclick="showNaviTab('blades')" id="blades_navibtn"class="navibtn">Turbine Blades</button></div>
+				<div class="flex__col"><button onclick="showNaviTab('coils')" id="coils_navibtn" class="navibtn">Dynamo Coils</button></div>
+			</div>
+		</div>
+		<div id="blades">
+			<div id="blades_row" class="flex__row">
+			</div>
+			<div align="center">
+				<form align="center">
+					<label>Internal Diameter: </label><input type="text" id="diameter" value="3"></input><br/>
+					<label>Shaft Length: </label><input type="text" id="shaft_length" value="3"></input>
+				</form>
+				<button onclick="refreshTurbine()">Update Turbine with new Dimensions</button>
+			</div>
+		</div>
+		<div id="coils">
+			<div id="coils_row" class="flex__row">
 			</div>
 		</div>
   </body>

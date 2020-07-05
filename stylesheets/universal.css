@@ -3,6 +3,9 @@
 	flex-direction: column;
 	align-items: center;
 }
+.flex__col.turbine {
+	max-width: 24px;
+}
 .flex__row {
 	display: flex;
 	flex-direction: row;
@@ -17,14 +20,24 @@
 	align-items: center;
 }
 
-.turbinebox {
-	width: 24px;
-	min-height: 24px;
-	border: 2px solid #050505;
+#blades_row {
+	align-items: center;
+	justify-content: center;
+}
+#coils_row {
+	align-items: center;
 	justify-content: center;
 }
 
-.turbinebox.selected {
+.turbinebox {
+	width: 24px;
+	min-height: 24px;
+	justify-content: center;
+}
+.turbinebox.border {
+	border: 2px solid #050505;
+}
+.turbinebox.border.selected {
 	border: 2px solid #3347EF;
 }
 
@@ -41,6 +54,18 @@
 	height: 20px;
 	z-index: 1;
 }
+.turbinerotor.horizontal {
+	max-width: 9px;
+	height: 24px;
+}
+.turbinerotor.top {
+	height: 18px;
+	margin-top: 6px;
+}
+.turbinerotor.bottom {
+	height: 18px;
+	margin-bottom: 6px;
+}
 .turbinerotor.none {
 
 }
@@ -51,16 +76,17 @@
 	background-color: #111111;
 }
 
-.turbinecoil {
+.turbinecoil {}
+.turbinecoil.border {
 	border: 2px solid #A8A8A8;
 }
-.turbinecoil.active {
+.turbinecoil.border.active {
 	border: 2px solid #51B863;
 }
-.turbinecoil.inactive {
+.turbinecoil.border.inactive {
 	border: 2px solid #B86351;
 }
-.turbinecoil.selected {
+.turbinecoil.border.selected {
 	border: 2px solid #3347EF;
 }
 .turbinecoil.none {
