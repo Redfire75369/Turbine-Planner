@@ -1,91 +1,91 @@
 function noBladeSets() {
-  let ret = 0
-  for (let i = 0; i < planner.rotors.length; i++) {
-    if (planner.rotors[i] != "stator") {
-      ret++;
-    }
-  }
-  return ret;
+	let ret = 0
+	for (let i = 0; i < planner.rotors.length; i++) {
+		if (planner.rotors[i] != "stator") {
+			ret++;
+		}
+	}
+	return ret;
 }
 
 function getBladeArea() {
-  return 4 * planner.diameter * (planner.diameter - planner.bearingDiameter) / 2
+	return 2 * planner.bearingDiameter * (planner.diameter - planner.bearingDiameter);
 }
 function getVolume() {
-  return getBladeArea() * noBladeSets();
+	return getBladeArea() * noBladeSets();
+}
+function getMaxRecipeRateMultiplier() {
+	return getVolume() * turbine_mb_per_blade;
 }
 
 function maxBladeExpansionCoefficient() {
-  let ret = 0
-  for (let i = 0; i < planner.rotors.length; i++) {
-    ret = Math.max(ret, rotors[planner.rotors[i]].coefficicentFactor);
-  }
-  return ret;
+	let ret = 0
+	for (let i = 0; i < planner.rotors.length; i++) {
+		ret = Math.max(ret, rotors[planner.rotors[i]].coefficientFactor);
+	}
+	return ret;
 }
 
-function recipeInputRateFP() {
-  let recipeInputRateDiff = recipeInputRate;
-  recipeInputRate = turbine_tension_throughput_factor * getMaxRecipeRateMultiplier();
-  recipeInputRateDiff = Math.abs(recipeInputRateDiff - recipeInputRate);
-  let roundingFactor =  Math.max(0, Math.E * Math.log1p(recipeInputRate() / (1 + recipeInputRateDiff)))
-  return (roundingFactor * 0 + recipeInputRate()) / (1 + roundingFactor);
+function getIdealExpansionLevel(depth) {
+	return Math.pow(ideal_total_expansion_level[planner.steam], (depth + 0.5) / planner.length);
 }
 
-function getMaxRecipeRateMultiplier() {
-  return  getVolume() * turbine_mb_per_blade;
+function getExpansionLevel(depth) {
+    let totalExpansion = 1;
+    for (let i = 0; i < depth; i ++) {
+        totalExpansion *= rotors[planner.rotors[i]].coefficientFactor;
+    }
+    return totalExpansion * (1 + rotors[planner.rotors[depth]].coefficientFactor) / 2;
 }
-
-function getNewRawProcessPower(previousRawPower, maxLimitPower, increasing) {
-  let absoluteLeniency = getBladeArea() * getThroughputLeniencyMult() * turbine_mb_per_blade;
-  let throughputEfficiency = getMaxRecipeRateMultiplier() == 0 ? 1 : Math.min(1, (recipeInputRateFP() + absoluteLeniency) / getMaxRecipeRateMultiplier());
-
-  return increasing ? throughputEfficiency * (getVolume() * previousRawPower + maxLimitPower) / (getVolume() + 1) : throughputEfficiency * (getVolume() * previousRawPower) / (getVolume() + 2);
+function getTotalExpansionLevel() {
+	let totalExpansion = 1;
+	for (let i = 0; i < planner.length; i ++) {
+        totalExpansion *= rotors[planner.rotors[i]].coefficientFactor;
+    }
+    return totalExpansion;
 }
 
 function getThroughputLeniencyMult() {
-  return Math.max(turbine_throughput_efficiency_leniency, idealTotalExpansionLevel() <= 1 || maxBladeExpansionCoefficient() <= 1 ? Math.pow(2^1023) : Math.ceil(Math.log(idealTotalExpansionLevel()) / Math.log(maxBladeExpansionCoefficient())));
-}
-
-function getRawLimitProcessPower(recipeInputRate) {
-	if (noBladeSets() == 0) {
-		return 0;
-	}
-	return rotorEfficiency() * getExpansionIdealityMultiplier(idealTotalExpansionLevel(), totalExpansionLevel()) * recipeInputRate * basePowerPerMB;
+	return Math.min(turbine_throughput_efficiency_leniency, ideal_total_expansion_level[planner.steam] <= 1 || maxBladeExpansionCoefficient() <= 1 ? Number.MAX_VALUE : Math.ceil(Math.log(ideal_total_expansion_level[planner.steam]) / Math.log(maxBladeExpansionCoefficient())));
 }
 
 function getExpansionIdealityMultiplier(ideal, actual) {
 	if (ideal <= 0 || actual <= 0) {
 		return 0;
 	}
-  return ideal < actual ? ideal / actual : actual / ideal;
+	return ideal < actual ? ideal / actual : actual / ideal;
 }
-
-function getIdealExpansionLevel(depth) {
-	return Math.pow(idealTotalExpansionLevel(), (depth + 0.5) / planner.length);
-}
-
 function getRotorEfficiency() {
-  let rotorEff = 0;
-  for (let i = 0; i < planner.length; i++) {
-    if (rotors[i].minEfficiency <= 0) {
-      continue;
-    }
-    rotorEff += rotors[i].minEfficiency * getExpansionIdealityMultiplier(getIdealExpansionLevel(i), expansionLevels[i]);
-  }
-  return rotorEff;
-}
-
-function getInputRatePowerBonus() {
-  return 1 + turbine_power_bonus_multiplier * Math.min(recipeInputRate(), getMaxRecipeRateMultiplier()) / (2 * turbine_mb_per_blade * Math.pow(getMaximumInteriorLength(), 2));
-}
-
-function getIdealExpansionLevels() {
-	let levels = [];
-	if (flowDir() == null) {
-		return levels;
-	}
+	let rotorEff = 0;
 	for (let i = 0; i < planner.length; i++) {
-		levels[i] = (getIdealExpansionLevel(i));
+		rotorEff += rotors[planner.rotors[i]].efficiency * getExpansionIdealityMultiplier(getIdealExpansionLevel(i), getExpansionLevel(i));
 	}
-	return levels;
+	return rotorEff / noBladeSets();
+}
+function getDynamoCoilEfficiency() {
+	let ret = 1;
+	let coilCount = 0;
+	for (let i = 1; i < planner.diameter + 1; i++) {
+		for (let j = 1; j < planner.diameter + 1; j++) {
+			if (coils[planner.coils[i - 1][j - 1]].efficiency > 0 && activeCoils[i - 1][j - 1]) {
+				ret *= coils[planner.coils[i - 1][j - 1]].efficiency;
+				coilCount++;
+			}
+		}
+	}
+	return coilCount == 0 ? 0 : ret / coilCount;
+}
+function getThroughputEfficiency() {
+	let absoluteLeniency = getBladeArea() * getThroughputLeniencyMult() * turbine_mb_per_blade;
+	return getMaxRecipeRateMultiplier() == 0 ? 1 : Math.min(1, (getMaxRecipeRateMultiplier() + absoluteLeniency) / getMaxRecipeRateMultiplier());
+}
+
+function getTotalPower() {
+	let base = turbine_power_per_mb[planner.steam] * getMaxRecipeRateMultiplier();
+	base *= getExpansionIdealityMultiplier(ideal_total_expansion_level[planner.steam], getTotalExpansionLevel());
+	base *= getRotorEfficiency();
+	base *= getDynamoCoilEfficiency();
+	base *= getThroughputEfficiency();
+	base *= 1 + getMaxRecipeRateMultiplier() / 691200;
+	return Math.round(base);
 }

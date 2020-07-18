@@ -1,37 +1,106 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 	<head>
-	  <meta charset="utf-8">
+		<meta charset="utf-8">
 		<title>NuclearCraft: Overhauled Turbine Planner</title>
 		<link rel="stylesheet" href="stylesheets/universal.css"/>
 
-    <script defer src="javascripts/blades.js" charset="utf-8" type="text/javascript"></script>
-		<script defer src="javascripts/userinterface.js" charset="utf-8" type="text/javascript"></script>
+		<script defer src="javascripts/turbine.js" charset="utf-8" type="text/javascript"></script>
+		<script defer src="javascripts/drawing.js" charset="utf-8" type="text/javascript"></script>
+		<script defer src="javascripts/updateUI.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/calculations.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/navigation.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/main.js" charset="utf-8" type="text/javascript"></script>
-  </head>
-  <body>
-		<div id="navigation">
-			<div class="flex__row">
-				<div class="flex__col"><button onclick="showNaviTab('blades')" id="blades_navibtn"class="navibtn">Turbine Blades</button></div>
-				<div class="flex__col"><button onclick="showNaviTab('coils')" id="coils_navibtn" class="navibtn">Dynamo Coils</button></div>
+	</head>
+	<body>
+		<div class="flex__row">
+			<div id="information" class="flex__col">
+				<p>This turbine is able to produce up to <span id="power"></span> RF/t.</p>
+				<p>Maximum Input Rate: <span id="steam"></span> mB/t</p>
+				<p>Rotor Efficiency: <span id="rotor_eff"></span> %</p>
+				<p>Dynamo Coil Efficiency: <span id="dynamo_coil_eff"></span> %</p>
 			</div>
-		</div>
-		<div id="blades">
-			<div id="blades_row" class="flex__row">
-			</div>
-			<div align="center">
+			<div id="generation" class="flex__col">
 				<form align="center">
 					<label>Internal Diameter: </label><input type="text" id="diameter" value="3"></input><br/>
 					<label>Shaft Length: </label><input type="text" id="shaft_length" value="3"></input>
 				</form>
 				<button onclick="refreshTurbine()">Update Turbine with new Dimensions</button>
+				<form align="center">
+					<label>Bearing Diameter: </label><input type="text" id="bearingDiameter" value="1"></input><br/>
+				</form>
+				<button onclick="drawBearing(parseInt(document.getElementById('bearingDiameter').value))">Update Turbine with new Dimensions</button>
+			</div>
+		</div><br/>
+		<div id="navigation">
+			<div class="flex__row">
+				<div class="flex__col"><button onclick="showNaviTab('blades')" id="blades_navibtn"class="navibtn">Turbine Blades</button></div>
+				<div class="flex__col"><button onclick="showNaviTab('coils')" id="coils_navibtn" class="navibtn">Dynamo Coils</button></div>
+			</div>
+		</div><br/>
+		<div id="blades">
+			<div id="blades_row" class="flex__row">
+			</div><br/>
+			<div class="flex__row justify">
+				<div onclick="selectRotor('steel')" class="turbinebox border"><div id="rotor_steel" class="turbinerotor selection steel"></div></div>
+				<div onclick="selectRotor('extreme')" class="turbinebox border"><div id="rotor_extreme" class="turbinerotor selection extreme"></div></div>
+				<div onclick="selectRotor('sicsiccmc')" class="turbinebox border"><div id="rotor_sicsiccmc" class="turbinerotor selection sicsiccmc"></div></div>
+				<div onclick="selectRotor('stator')" class="turbinebox border"><div id="rotor_stator" class="turbinerotor selection stator"></div></div>
 			</div>
 		</div>
 		<div id="coils">
 			<div id="coils_row" class="flex__row">
+			</div></br>
+			<div class="flex__row justify">
+				<div onclick="selectCoil('none')" id="coil_none" class="flex__col turbinebox turbinecoil border none"></div>
+				<div onclick="selectCoil('connector')" id="coil_connector" class="flex__col turbinebox turbinecoil border connector"></div>
+				<div onclick="selectCoil('magnesium')" id="coil_magnesium" class="flex__col turbinebox turbinecoil border magnesium"></div>
+				<div onclick="selectCoil('beryllium')" id="coil_beryllium" class="flex__col turbinebox turbinecoil border beryllium"></div>
+				<div onclick="selectCoil('aluminium')" id="coil_aluminium" class="flex__col turbinebox turbinecoil border aluminium"></div>
+				<div onclick="selectCoil('gold')" id="coil_gold" class="flex__col turbinebox turbinecoil border gold"></div>
+				<div onclick="selectCoil('copper')" id="coil_copper" class="flex__col turbinebox turbinecoil border copper"></div>
+				<div onclick="selectCoil('silver')" id="coil_silver" class="flex__col turbinebox turbinecoil border silver"></div>
+			</div>
+			<div class="flex__row desc justify" align="center">
+				<div id="coil_desc_none" class="coildesc">
+					<b style="font-size: 20px">No Dynamo Coil:</b><br>
+					<p>Can be placed anywhere<p>
+				</div>
+				<div id="coil_desc_connector" class="coildesc">
+					<b style="font-size: 20px">Dynamo Coil Connector:</b><br>
+					<p>Must be adjacent to at least one Dynamo Coil</p>
+				</div>
+				<div id="coil_desc_magnesium" class="coildesc">
+					<b style="font-size: 20px">Magnesium Dynamo Coil:</b><br>
+					<p>Efficiency Multiplier: 86%</p>
+					<p>Must be adjacent to at least one Rotor Bearing</p>
+				</div>
+				<div id="coil_desc_beryllium" class="coildesc">
+					<b style="font-size: 20px">Beryllium Dynamo Coil:</b><br>
+					<p>Efficiency Multiplier: 90%</p>
+					<p>Must be adjacent to at least one Magnesium Dynamo Coil</p>
+				</div>
+				<div id="coil_desc_aluminium" class="coildesc">
+					<b style="font-size: 20px">Aluminium Dynamo Coil:</b><br>
+					<p>Efficiency Multiplier: 98%</p>
+					<p>Must be adjacent to at least two Magnesium Dynamo Coils</p>
+				</div>
+				<div id="coil_desc_gold" class="coildesc">
+					<b style="font-size: 20px">Gold Dynamo Coil:</b><br>
+					<p>Efficiency Multiplier: 104%</p>
+					<p>Must be adjacent to at least one Aluminium Dynamo Coil</p>
+				</div>
+				<div id="coil_desc_copper" class="coildesc">
+					<b style="font-size: 20px">Copper Dynamo Coil:</b><br>
+					<p>Efficiency Multiplier: 110%</p>
+					<p>Must be adjacent to at least one Magnesium Dynamo Coil</p>
+				</div>
+				<div id="coil_desc_silver" class="coildesc">
+					<b style="font-size: 20px">Silver Dynamo Coil:</b><br>
+					<p>Efficiency Multiplier: 112%</p>
+					<p>Must be adjacent to at least one Gold and one Copper Dynamo Coil</p>
+				</div>
 			</div>
 		</div>
-  </body>
+	</body>
 </html>
