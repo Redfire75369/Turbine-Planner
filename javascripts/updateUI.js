@@ -21,9 +21,10 @@ function updateUIBlades() {
 }
 
 function updateUICoils() {
+	activeDynamoCoils();
 	for (let i = 1; i < planner.diameter + 1; i++) {
 		for (let j = 1; j < planner.diameter + 1; j++) {
-			if (coils[planner.coils[i - 1][j - 1]].efficiency > 0) {
+			if (planner.coils[i - 1][j - 1] != "none" && planner.coils[i - 1][j - 1] != "bearing") {
 				if (activeCoils[i - 1][j - 1]) {
 					document.getElementById("coils_row_" + j +"_" + i).setAttribute("class", "flex__row turbinebox turbinecoil border active " + planner.coils[i - 1][j - 1]);
 				} else  {

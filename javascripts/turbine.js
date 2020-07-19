@@ -49,7 +49,7 @@ function activeDynamoCoils() {
 					activeCoils[i - 1][j - 1] = atLeast(1, "bearing", i - 1, j - 1) || atLeast(1, "connector", i - 1, j - 1);
 					break;
 				case "beryllium":
-					activeCoils[i - 1][j - 1] = atLeast(1, "magnesium", i - 1, j - 1); 
+					activeCoils[i - 1][j - 1] = atLeast(1, "magnesium", i - 1, j - 1);
 					break;
 				case "aluminium":
 					activeCoils[i - 1][j - 1] = atLeast(2, "magnesium", i - 1, j - 1);
@@ -72,34 +72,85 @@ function activeDynamoCoils() {
 
 function getHorizontalCoils(x, y) {
 	if (x == 0 && y == 0) {
-		return [planner.coils[x][y + 1], planner.coils[x + 1][y]];
+		return {
+			2: planner.coils[x + 1][y],
+			3: planner.coils[x][y + 1]
+		};
 	} else if (x == 0 && y == planner.diameter - 1) {
-		return [planner.coils[x][y - 1], planner.coils[x + 1][y]];
+		return {
+			1: planner.coils[x][y - 1],
+			2: planner.coils[x + 1][y]
+		};
 	} else if (x == planner.diameter - 1 && y == 0) {
-		return [planner.coils[x - 1][y], planner.coils[x][y + 1]];
+		return {
+			0: planner.coils[x - 1][y],
+			3: planner.coils[x][y + 1]
+		}
 	} else if (x == planner.diameter - 1 && y == planner.diameter - 1) {
-		return [planner.coils[x - 1][y], planner.coils[x][y - 1]]; 
+		return {
+			0: planner.coils[x - 1][y],
+			1: planner.coils[x][y - 1]
+		}
 	} else if (x == 0) {
-		return [planner.coils[x][y - 1], planner.coils[x][y + 1], planner.coils[x + 1][y]];
+		return {
+			1: planner.coils[x][y - 1],
+			2: planner.coils[x + 1][y],
+			3: planner.coils[x][y + 1]
+		}
 	} else if (y == 0) {
-		return [planner.coils[x - 1][y], planner.coils[x][y + 1], planner.coils[x + 1][y]];
+		return {
+			0: planner.coils[x - 1][y],
+			2: planner.coils[x + 1][y],
+			3: planner.coils[x][y + 1]
+		}
 	} else if (x == planner.diameter - 1) {
-		return [planner.coils[x - 1][y], planner.coils[x][y - 1], planner.coils[x][y + 1]];
+		return {
+			0: planner.coils[x - 1][y],
+			1: planner.coils[x][y - 1],
+			2: planner.coils[x][y + 1]
+		}
 	} else if (y == planner.diameter - 1) {
 		return [planner.coils[x - 1][y], planner.coils[x][y - 1], planner.coils[x + 1][y]];
 	} else {
-		return [planner.coils[x - 1][y], planner.coils[x][y - 1], planner.coils[x][y + 1], planner.coils[x + 1][y]];
+		return [planner.coils[x - 1][y], planner.coils[x][y - 1], planner.coils[x + 1][y], planner.coils[x][y + 1]];
+	}
+}
+
+function keyIntoActivation(key, x, y) {
+	if (key === undefined) {
+		return false;
+	}
+	switch (key.toString()) {
+		case "0":
+			return activeCoils[y][x - 1];
+		case "1":
+			return activeCoils[y - 1][x];
+		case "2":
+			return activeCoils[y][x + 1];
+		case "3":
+			return activeCoils[y + 1][x];
+		default:
+			return false;
 	}
 }
 
 function atLeast(amount, type, x, y) {
 	let adjacent = getHorizontalCoils(x, y);
+	let keys = Object.keys(adjacent);
 	let bool = true;
 	let activated = true;
-	bool &= adjacent.includes(type);
-	for (let i = 1; i < amount; i++) {
-		adjacent.splice(adjacent.findIndex((p) => p == type), 1);
-		bool &= adjacent.includes(type);
+	let key = 4;
+	for (let i = 0; i < amount; i++) {
+		adjacent[key] = undefined;
+		key = Object.keys(adjacent).filter(key => adjacent[key] == type)[0];
+		bool &= adjacent[key] == type;
+		activated &= keyIntoActivation(key, x, y);
+		for (let j = 0; j < 4 && !keyIntoActivation(key, x, y); j++) {
+			adjacent[key] = undefined;
+			key = Object.keys(adjacent).filter(key => adjacent[key] == type)[0];
+			bool &= adjacent[key] == type;
+			activated = keyIntoActivation(key, x, y);
+		}
 	}
 	return bool && activated;
 }

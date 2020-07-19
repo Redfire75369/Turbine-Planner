@@ -57,6 +57,7 @@ function drawBearing(bearingDiameter) {
 			}
 		}
 	}
+	activeDynamoCoils();
 }
 
 function drawDynamoCoils() {
