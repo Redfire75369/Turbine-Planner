@@ -21,17 +21,24 @@ function updateUIBlades() {
 }
 
 function updateUICoils() {
+	document.getElementById("coil_eff_magnesium").innerText = (coils["magnesium"].efficiency * 100).toFixed(2);
+	document.getElementById("coil_eff_beryllium").innerText = (coils["beryllium"].efficiency * 100).toFixed(2);
+	document.getElementById("coil_eff_aluminium").innerText = (coils["aluminium"].efficiency * 100).toFixed(2);
+	document.getElementById("coil_eff_gold").innerText = (coils["gold"].efficiency * 100).toFixed(2);
+	document.getElementById("coil_eff_copper").innerText = (coils["copper"].efficiency * 100).toFixed(2);
+	document.getElementById("coil_eff_silver").innerText = (coils["silver"].efficiency * 100).toFixed(2);
+	
 	activeDynamoCoils();
 	for (let i = 1; i < planner.diameter + 1; i++) {
 		for (let j = 1; j < planner.diameter + 1; j++) {
-			if (planner.coils[i - 1][j - 1] != "none" && planner.coils[i - 1][j - 1] != "bearing") {
-				if (activeCoils[i - 1][j - 1]) {
-					document.getElementById("coils_row_" + j +"_" + i).setAttribute("class", "flex__row turbinebox turbinecoil border active " + planner.coils[i - 1][j - 1]);
+			if (planner.coils[j - 1][i - 1] != "none" && planner.coils[j - 1][i - 1] != "bearing") {
+				if (activeCoils[j - 1][i - 1]) {
+					document.getElementById("coils_row_" + j +"_" + i).setAttribute("class", "flex__row turbinebox turbinecoil border active " + planner.coils[j - 1][i - 1]);
 				} else  {
-					document.getElementById("coils_row_" + j +"_" + i).setAttribute("class", "flex__row turbinebox turbinecoil border inactive " + planner.coils[i - 1][j - 1]);
+					document.getElementById("coils_row_" + j +"_" + i).setAttribute("class", "flex__row turbinebox turbinecoil border inactive " + planner.coils[j - 1][i - 1]);
 				}
 			} else {
-				document.getElementById("coils_row_" + j +"_" + i).setAttribute("class", "flex__row turbinebox turbinecoil border " + planner.coils[i - 1][j - 1]);
+				document.getElementById("coils_row_" + j +"_" + i).setAttribute("class", "flex__row turbinebox turbinecoil border " + planner.coils[j - 1][i - 1]);
 			}
 		}
 	}
@@ -39,9 +46,11 @@ function updateUICoils() {
 
 function updateUIStats() {
 	document.getElementById("power").innerText = getTotalPower();
-	document.getElementById("steam").innerText = getMaxRecipeRateMultiplier();
-	document.getElementById("rotor_eff").innerText = getRotorEfficiency();
-	document.getElementById("dynamo_coil_eff").innerText = getDynamoCoilEfficiency();
+	document.getElementById("steam").innerText = getMaxRecipeRate();
+	document.getElementById("throughput_eff").innerText = getThroughputEfficiency().toFixed(2);
+	document.getElementById("rate_bonus").innerText = (1 + getMaxRecipeRate() / 691200).toFixed(2);
+	document.getElementById("rotor_eff").innerText = (getRotorEfficiency() * 100).toFixed(2);
+	document.getElementById("dynamo_coil_eff").innerText = (getDynamoCoilEfficiency() * 100).toFixed(2);
 }
 
 setInterval(function() {

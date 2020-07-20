@@ -9,6 +9,7 @@
 		<script defer src="javascripts/drawing.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/updateUI.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/calculations.js" charset="utf-8" type="text/javascript"></script>
+		<script defer src="javascripts/configuration.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/navigation.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/main.js" charset="utf-8" type="text/javascript"></script>
 	</head>
@@ -19,23 +20,22 @@
 				<p>Maximum Input Rate: <span id="steam"></span> mB/t</p>
 				<p>Rotor Efficiency: <span id="rotor_eff"></span> %</p>
 				<p>Dynamo Coil Efficiency: <span id="dynamo_coil_eff"></span> %</p>
+				<p>Throughput Efficiency: <span id="throughput_eff"></span> %</p>
+				<p>Rate Power Bonus: <span id="rate_bonus"></p>
 			</div>
 			<div id="generation" class="flex__col">
-				<form align="center">
-					<label>Internal Diameter: </label><input type="text" id="diameter" value="3"></input><br/>
-					<label>Shaft Length: </label><input type="text" id="shaft_length" value="3"></input>
-				</form>
-				<button onclick="refreshTurbine()">Update Turbine with new Dimensions</button>
-				<form align="center">
-					<label>Bearing Diameter: </label><input type="text" id="bearingDiameter" value="1"></input><br/>
-				</form>
-				<button onclick="drawBearing(parseInt(document.getElementById('bearingDiameter').value))">Update Turbine with new Dimensions</button>
+				<div class="flex__row"><label>Internal Diameter: </label><input type="text" id="diameter" value="3"></input></div>
+				<div class="flex__row"><label>Shaft Length: </label><input type="text" id="shaft_length" value="3"></input></div>
+				<div class="flex__row"><button onclick="refreshTurbine()">Update Turbine with new Dimensions</button></div>
+				<div class="flex__row"><label>Bearing Diameter: </label><input type="text" id="bearingDiameter" value="1"></input></div>
+				<div class="flex__row"><button onclick="drawBearing(parseInt(document.getElementById('bearingDiameter').value))">Update Turbine with new Dimensions</button></div>
 			</div>
 		</div><br/>
 		<div id="navigation">
 			<div class="flex__row">
 				<div class="flex__col"><button onclick="showNaviTab('blades')" id="blades_navibtn"class="navibtn">Turbine Blades</button></div>
 				<div class="flex__col"><button onclick="showNaviTab('coils')" id="coils_navibtn" class="navibtn">Dynamo Coils</button></div>
+				<div class="flex__col"><button onclick="showNaviTab('config')" id="config_navibtn" class="navibtn">Configuration</button></div>
 			</div>
 		</div><br/>
 		<div id="blades">
@@ -72,34 +72,135 @@
 				</div>
 				<div id="coil_desc_magnesium" class="coildesc">
 					<b style="font-size: 20px">Magnesium Dynamo Coil:</b><br>
-					<p>Efficiency Multiplier: 86%</p>
+					<p>Efficiency Multiplier: <span id="coil_eff_magnesium">86</span> %</p>
 					<p>Must be adjacent to at least one Rotor Bearing</p>
 				</div>
 				<div id="coil_desc_beryllium" class="coildesc">
 					<b style="font-size: 20px">Beryllium Dynamo Coil:</b><br>
-					<p>Efficiency Multiplier: 90%</p>
+					<p>Efficiency Multiplier: <span id="coil_eff_beryllium">90</span> %</p>
 					<p>Must be adjacent to at least one Magnesium Dynamo Coil</p>
 				</div>
 				<div id="coil_desc_aluminium" class="coildesc">
 					<b style="font-size: 20px">Aluminium Dynamo Coil:</b><br>
-					<p>Efficiency Multiplier: 98%</p>
+					<p>Efficiency Multiplier: <span id="coil_eff_aluminium">98</span> %</p>
 					<p>Must be adjacent to at least two Magnesium Dynamo Coils</p>
 				</div>
 				<div id="coil_desc_gold" class="coildesc">
 					<b style="font-size: 20px">Gold Dynamo Coil:</b><br>
-					<p>Efficiency Multiplier: 104%</p>
+					<p>Efficiency Multiplier: <span id="coil_eff_gold">104</span> %</p>
 					<p>Must be adjacent to at least one Aluminium Dynamo Coil</p>
 				</div>
 				<div id="coil_desc_copper" class="coildesc">
 					<b style="font-size: 20px">Copper Dynamo Coil:</b><br>
-					<p>Efficiency Multiplier: 110%</p>
+					<p>Efficiency Multiplier: <span id="coil_eff_copper">110</span> %</p>
 					<p>Must be adjacent to at least one Beryllium Dynamo Coil</p>
 				</div>
 				<div id="coil_desc_silver" class="coildesc">
 					<b style="font-size: 20px">Silver Dynamo Coil:</b><br>
-					<p>Efficiency Multiplier: 112%</p>
+					<p>Efficiency Multiplier: <span id="coil_eff_silver">112</span> %</p>
 					<p>Must be adjacent to at least one Gold and one Copper Dynamo Coil</p>
 				</div>
+			</div>
+		</div>
+		<div id="config">
+			<div class="flex__row">
+				<div class="flex__col">
+					<div class="flex__row">Rotors:</div>
+					<div class="flex__row">
+						<div class="flex__col">
+							<div class="flex__row">
+								<div class="flex__col">Rotor</div>
+								<div class="flex__col">Efficiency</div>
+								<div class="flex__col">Expansion Coefficient</div>
+							</div>
+							<div class="flex__row">
+								<div class="flex__col"><label>Steel:</label></div>
+								<div class="flex__col"><input type="text" id="config_rotor_eff_steel" value="1"></input></div>
+								<div class="flex__col"><input type="text" id="config_rotor_exp_steel" value="1.4"></input></div>
+							</div>
+							<div class="flex__row">
+								<div class="flex__col"><label>Extreme:</label></div>
+								<div class="flex__col"><input type="text" id="config_rotor_eff_extreme" value="1.1"></input></div>
+								<div class="flex__col"><input type="text" id="config_rotor_exp_extreme" value="1.6"></input></div>
+							</div>
+							<div class="flex__row">
+								<div class="flex__col"><label>SiC SiC CMC:</label></div>
+								<div class="flex__col"><input type="text" id="config_rotor_eff_sicsiccmc" value="1.2"></input></div>
+								<div class="flex__col"><input type="text" id="config_rotor_exp_sicsiccmc" value="1.8"></input></div>
+							</div>
+							<div class="flex__row">
+								<div class="flex__col"><label>Stator:</label></div>
+								<div class="flex__col"><input type="text" id="config_rotor_eff_stator" value="0"></input></div>
+								<div class="flex__col"><input type="text" id="config_rotor_exp_stator" value="0.75"></input></div>
+							</div>
+						</div>
+					</div>
+					<button onclick="submitRotorConfig()">Update Rotor Configuration</button>
+				</div>
+				<div class="flex__col">
+					<div class="flex__row">Dynamo Coils:</div>
+					<div class="flex__row">
+						<div class="flex__col">
+							<div class="flex__row">
+								<div class="flex__col">Dynamo Coil</div>
+								<div class="flex__col">Efficiency</div>
+							</div>
+							<div class="flex__row">
+								<div class="flex__col"><label>Magnesium:</label></div>
+								<div class="flex__col"><input type="text" id="config_coil_eff_magnesium" value="0.86"></input></div>
+							</div>
+							<div class="flex__row">
+								<div class="flex__col"><label>Beryllium:</label></div>
+								<div class="flex__col"><input type="text" id="config_coil_eff_beryllium" value="0.90"></input></div>
+							</div>
+							<div class="flex__row">
+								<div class="flex__col"><label>Aluminium:</label></div>
+								<div class="flex__col"><input type="text" id="config_coil_eff_aluminium" value="0.98"></input></div>
+							</div>
+							<div class="flex__row">
+								<div class="flex__col"><label>Gold:</label></div>
+								<div class="flex__col"><input type="text" id="config_coil_eff_gold" value="1.04"></input></div>
+							</div>
+							<div class="flex__row">
+								<div class="flex__col"><label>Copper:</label></div>
+								<div class="flex__col"><input type="text" id="config_coil_eff_copper" value="1.10"></input></div>
+							</div>
+							<div class="flex__row">
+								<div class="flex__col"><label>Silver:</label></div>
+								<div class="flex__col"><input type="text" id="config_coil_eff_silver" value="1.12"></input></div>
+							</div>
+						</div>
+					</div>
+					<button onclick="submitCoilConfig()">Update Coil Configuration</button>
+				</div>
+			</div>
+			<div class="flex__row">
+				<div class="flex__col">
+					<div class="flex__row">
+						<div class="flex__col">
+							<div class="flex__row">Energy Density (RF/mB)</div>
+							<div class="flex__row"><label>High Pressure Steam: </label><input type="text" id="config_hps_rf" value="16.0"></input></div>
+							<div class="flex__row"><label>Low Pressure Steam: </label><input type="text" id="config_lps_rf" value="4.0"></input></div>
+							<div class="flex__row"><label>Steam: </label><input type="text" id="config_steam_rf" value="4.0"></input></div>
+						</div>
+						<div class="flex__col">
+							<div class="flex__row">Expansion Level</div>
+							<div class="flex__row"><label>High Pressure Steam: </label><input type="text" id="config_hps_exp" value="4.0"></input></div>
+							<div class="flex__row"><label>Low Pressure Steam: </label><input type="text" id="config_lps_exp" value="2.0"></input></div>
+							<div class="flex__row"><label>Steam: </label><input type="text" id="config_steam_exp" value="2.0"></input></div>
+						</div>
+						<div class="flex__col">
+							<div class="flex__row">Others</div>
+							<div class="flex__row"><label>Turbine mB Per Blade: </label><input type="text" id="config_turbine_mb_per_blade" value="100"></input></div>
+							<div class="flex__row"><label>Throughput Efficiency Leniency: </label><input type="text" id="config_throughput_eff_leniency" value="1.0"></input></div>
+							<div class="flex__row"><label>Throughput Factor: </label><input type="text" id="config_throughput_factor" value="2.0"></input></div>
+							<div class="flex__row"><label>Power Bonus: </label><input type="text" id="config_power_bonus" value="1.0"></input></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="flex__row">
+				<button onclick="submitOtherConfig()">Update Other Configuration</button>
 			</div>
 		</div>
 	</body>

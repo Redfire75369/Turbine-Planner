@@ -29,8 +29,8 @@ function selectCoil(coil) {
 	planner.activeCoil = coil;
 }
 function setCoil(x, y) {
-	if (planner.coils[x][y] != "bearing") {
-		planner.coils[x][y] = planner.activeCoil;
+	if (planner.coils[y][x] != "bearing") {
+		planner.coils[y][x] = planner.activeCoil;
 		activeDynamoCoils();
 	}
 }
@@ -38,33 +38,33 @@ function setCoil(x, y) {
 function activeDynamoCoils() {
 	for (let i = 1; i < planner.diameter + 1; i++) {
 		for (let j = 1; j < planner.diameter + 1; j++) {
-			switch (planner.coils[i - 1][j - 1]) {
+			switch (planner.coils[j - 1][i - 1]) {
 				case "bearing":
-					activeCoils[i - 1][j - 1] = true;
+					activeCoils[j - 1][i - 1] = true;
 					break;
 				case "connector":
-					activeCoils[i - 1][j - 1] = atLeast(1, "magnesium", i - 1, j - 1) || atLeast(1, "beryllium", i - 1, j - 1) || atLeast(1, "aluminium", i - 1, j - 1) || atLeast(1, "copper", i - 1, j - 1) || atLeast(1, "gold", i - 1, j - 1) || atLeast(1, "silver", i - 1, j - 1);
+					activeCoils[j - 1][i - 1] = atLeast(1, "magnesium", i - 1, j - 1) || atLeast(1, "beryllium", i - 1, j - 1) || atLeast(1, "aluminium", i - 1, j - 1) || atLeast(1, "copper", i - 1, j - 1) || atLeast(1, "gold", i - 1, j - 1) || atLeast(1, "silver", i - 1, j - 1);
 					break;
 				case "magnesium":
-					activeCoils[i - 1][j - 1] = atLeast(1, "bearing", i - 1, j - 1) || atLeast(1, "connector", i - 1, j - 1);
+					activeCoils[j - 1][i - 1] = atLeast(1, "bearing", i - 1, j - 1) || atLeast(1, "connector", i - 1, j - 1);
 					break;
 				case "beryllium":
-					activeCoils[i - 1][j - 1] = atLeast(1, "magnesium", i - 1, j - 1);
+					activeCoils[j - 1][i - 1] = atLeast(1, "magnesium", i - 1, j - 1);
 					break;
 				case "aluminium":
-					activeCoils[i - 1][j - 1] = atLeast(2, "magnesium", i - 1, j - 1);
+					activeCoils[j - 1][i - 1] = atLeast(2, "magnesium", i - 1, j - 1);
 					break;
 				case "gold":
-					activeCoils[i - 1][j - 1] = atLeast(1, "aluminium", i - 1, j - 1);
+					activeCoils[j - 1][i - 1] = atLeast(1, "aluminium", i - 1, j - 1);
 					break;
 				case "copper":
-					activeCoils[i - 1][j - 1] = atLeast(1, "beryllium", i - 1, j - 1);
+					activeCoils[j - 1][i - 1] = atLeast(1, "beryllium", i - 1, j - 1);
 					break;
 				case "silver":
-					activeCoils[i - 1][j - 1] = atLeast(1, "copper", i - 1, j - 1) && atLeast(1, "gold", i - 1, j - 1);
+					activeCoils[j - 1][i - 1] = atLeast(1, "copper", i - 1, j - 1) && atLeast(1, "gold", i - 1, j - 1);
 					break;
 				default:
-					activeCoils[i - 1][j - 1] = false;
+					activeCoils[j - 1][i - 1] = false;
 			}
 		}
 	}
@@ -73,46 +73,55 @@ function activeDynamoCoils() {
 function getHorizontalCoils(x, y) {
 	if (x == 0 && y == 0) {
 		return {
-			2: planner.coils[x + 1][y],
-			3: planner.coils[x][y + 1]
+			2: planner.coils[y][x + 1],
+			3: planner.coils[y + 1][x]
 		};
 	} else if (x == 0 && y == planner.diameter - 1) {
 		return {
-			1: planner.coils[x][y - 1],
-			2: planner.coils[x + 1][y]
+			1: planner.coils[y - 1][x],
+			2: planner.coils[y][x + 1]
 		};
 	} else if (x == planner.diameter - 1 && y == 0) {
 		return {
-			0: planner.coils[x - 1][y],
-			3: planner.coils[x][y + 1]
+			0: planner.coils[y][x - 1],
+			3: planner.coils[y + 1][x]
 		}
 	} else if (x == planner.diameter - 1 && y == planner.diameter - 1) {
 		return {
-			0: planner.coils[x - 1][y],
-			1: planner.coils[x][y - 1]
+			0: planner.coils[y][x - 1],
+			1: planner.coils[y - 1][x]
 		}
 	} else if (x == 0) {
 		return {
-			1: planner.coils[x][y - 1],
-			2: planner.coils[x + 1][y],
-			3: planner.coils[x][y + 1]
+			1: planner.coils[y - 1][x],
+			2: planner.coils[y][x + 1],
+			3: planner.coils[y + 1][x]
 		}
 	} else if (y == 0) {
 		return {
-			0: planner.coils[x - 1][y],
-			2: planner.coils[x + 1][y],
-			3: planner.coils[x][y + 1]
+			0: planner.coils[y][x - 1],
+			2: planner.coils[y][x + 1],
+			3: planner.coils[y + 1][x]
 		}
 	} else if (x == planner.diameter - 1) {
 		return {
-			0: planner.coils[x - 1][y],
-			1: planner.coils[x][y - 1],
-			2: planner.coils[x][y + 1]
+			0: planner.coils[y][x - 1],
+			1: planner.coils[y - 1][x],
+			3: planner.coils[y + 1][x]
 		}
 	} else if (y == planner.diameter - 1) {
-		return [planner.coils[x - 1][y], planner.coils[x][y - 1], planner.coils[x + 1][y]];
+		return {
+			0: planner.coils[y][x - 1],
+			1: planner.coils[y - 1][x],
+			2: planner.coils[y][x + 1]
+		};
 	} else {
-		return [planner.coils[x - 1][y], planner.coils[x][y - 1], planner.coils[x + 1][y], planner.coils[x][y + 1]];
+		return {
+			0: planner.coils[y][x - 1],
+			1: planner.coils[y - 1][x],
+			2: planner.coils[y][x + 1],
+			3: planner.coils[y + 1][x]
+		}
 	}
 }
 
@@ -141,7 +150,6 @@ function atLeast(amount, type, x, y) {
 	let activated = true;
 	let key = 4;
 	for (let i = 0; i < amount; i++) {
-		adjacent[key] = undefined;
 		key = Object.keys(adjacent).filter(key => adjacent[key] == type)[0];
 		bool &= adjacent[key] == type;
 		activated &= keyIntoActivation(key, x, y);
@@ -151,6 +159,7 @@ function atLeast(amount, type, x, y) {
 			bool &= adjacent[key] == type;
 			activated = keyIntoActivation(key, x, y);
 		}
+		adjacent[key] = undefined;
 	}
 	return bool && activated;
 }

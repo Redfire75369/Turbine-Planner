@@ -54,6 +54,8 @@ function drawBearing(bearingDiameter) {
 		for (let j = 1; j < planner.diameter + 1; j++) {
 			if (j >= start && j < start + bearingDiameter && i >= start && i < start + bearingDiameter) {
 				planner.coils[i - 1][j - 1] = "bearing";
+			} else {
+				planner.coils[i - 1][j - 1] = "none";
 			}
 		}
 	}
