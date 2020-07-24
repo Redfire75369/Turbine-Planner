@@ -56,15 +56,6 @@ const ideal_total_expansion_level = [
 document.getElementById("coils").style.display = "none";
 document.getElementById("config").style.display = "none";
 
-document.getElementById("coil_desc_none").style.display = "none";
-document.getElementById("coil_desc_connector").style.display = "none";
-document.getElementById("coil_desc_magnesium").style.display = "none";
-document.getElementById("coil_desc_beryllium").style.display = "none";
-document.getElementById("coil_desc_aluminium").style.display = "none";
-document.getElementById("coil_desc_gold").style.display = "none";
-document.getElementById("coil_desc_copper").style.display = "none";
-document.getElementById("coil_desc_silver").style.display = "none";
-
 selectRotor("steel");
 selectCoil("magnesium");
 
