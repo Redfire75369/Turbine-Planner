@@ -54,7 +54,7 @@ td {
 
 .tooltiptext.turbine {
 	width: 120px;
-	bottom: 105%;
+	top: 105%;
 	left: 50%;
 	margin-left: -60px;
 	padding: 5px;

@@ -140,24 +140,3 @@ function keyIntoActivation(key, x, y) {
 			return false;
 	}
 }
-
-function atLeast(amount, type, x, y) {
-	let adjacent = getHorizontalCoils(x, y);
-	let keys = Object.keys(adjacent);
-	let bool = true;
-	let activated = true;
-	let key = 4;
-	for (let i = 0; i < amount; i++) {
-		key = Object.keys(adjacent).filter(key => adjacent[key] == type)[0];
-		bool &= adjacent[key] == type;
-		activated &= keyIntoActivation(key, x, y);
-		for (let j = 0; j < 4 && !keyIntoActivation(key, x, y); j++) {
-			adjacent[key] = undefined;
-			key = Object.keys(adjacent).filter(key => adjacent[key] == type)[0];
-			bool &= adjacent[key] == type;
-			activated = keyIntoActivation(key, x, y);
-		}
-		adjacent[key] = undefined;
-	}
-	return bool && activated;
-}
