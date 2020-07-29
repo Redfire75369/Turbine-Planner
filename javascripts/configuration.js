@@ -19,16 +19,16 @@ function submitCoilConfig() {
 }
 
 function submitOtherConfig() {
-	turbine_power_per_mb[0] = parseFloat(document.getElementById("config_hps_rf").value);
-	turbine_power_per_mb[1] = parseFloat(document.getElementById("config_lps_rf").value);
-	turbine_power_per_mb[2] = parseFloat(document.getElementById("config_steam_rf").value);
+	planner.config.turbine_power_per_mb[0] = parseFloat(document.getElementById("config_hps_rf").value);
+	planner.config.turbine_power_per_mb[1] = parseFloat(document.getElementById("config_lps_rf").value);
+	planner.config.turbine_power_per_mb[2] = parseFloat(document.getElementById("config_steam_rf").value);
 	
-	ideal_total_expansion_level[0] = parseFloat(document.getElementById("config_hps_exp").value);
-	ideal_total_expansion_level[1] = parseFloat(document.getElementById("config_lps_exp").value);
-	ideal_total_expansion_level[2] = parseFloat(document.getElementById("config_steam_exp").value);
+	planner.config.ideal_total_expansion_level[0] = parseFloat(document.getElementById("config_hps_exp").value);
+	planner.config.ideal_total_expansion_level[1] = parseFloat(document.getElementById("config_lps_exp").value);
+	planner.config.ideal_total_expansion_level[2] = parseFloat(document.getElementById("config_steam_exp").value);
 	
-	turbine_mb_per_blade = parseInt(document.getElementById("config_turbine_mb_per_blade").value);
-	turbine_throughput_efficiency_leniency = parseFloat(document.getElementById("config_throughput_eff_leniency").value);
-	turbine_tension_throughput_factor = parseFloat(document.getElementById("config_throughput_factor").value);
-	turbine_power_bonus_multiplier = parseFloat(document.getElementById("config_power_bonus").value);
+	planner.config.turbine_mb_per_blade = parseInt(document.getElementById("config_turbine_mb_per_blade").value);
+	planner.config.turbine_throughput_efficiency_leniency = parseFloat(document.getElementById("config_throughput_eff_leniency").value);
+	planner.config.turbine_tension_throughput_factor = parseFloat(document.getElementById("config_throughput_factor").value);
+	planner.config.turbine_power_bonus_multiplier = parseFloat(document.getElementById("config_power_bonus").value);
 }

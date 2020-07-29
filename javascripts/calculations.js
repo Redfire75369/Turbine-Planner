@@ -15,7 +15,7 @@ function getVolume() {
 	return getBladeArea() * noBladeSets();
 }
 function getMaxRecipeRate() {
-	return getVolume() * turbine_mb_per_blade;
+	return getVolume() * planner.config.turbine_mb_per_blade;
 }
 
 function maxBladeExpansionCoefficient() {
@@ -27,27 +27,27 @@ function maxBladeExpansionCoefficient() {
 }
 
 function getIdealExpansionLevel(depth) {
-	return Math.pow(ideal_total_expansion_level[planner.steam], (depth + 0.5) / planner.length);
+	return Math.pow(planner.config.ideal_total_expansion_level[planner.steam], (depth + 0.5) / planner.length);
 }
 
 function getExpansionLevel(depth) {
-    let totalExpansion = 1;
-    for (let i = 0; i < depth; i ++) {
-        totalExpansion *= rotors[planner.rotors[i]].coefficientFactor;
-    }
-    return totalExpansion * Math.sqrt(rotors[planner.rotors[depth]].coefficientFactor);
+	let totalExpansion = 1;
+	for (let i = 0; i < depth; i++) {
+		totalExpansion *= rotors[planner.rotors[i]].coefficientFactor;
+	}
+	return totalExpansion * Math.sqrt(rotors[planner.rotors[depth]].coefficientFactor);
 }
 
 function getTotalExpansionLevel() {
 	let totalExpansion = 1;
-	for (let i = 0; i < planner.length; i ++) {
-        totalExpansion *= rotors[planner.rotors[i]].coefficientFactor;
-    }
-    return totalExpansion;
+	for (let i = 0; i < planner.length; i++) {
+		totalExpansion *= rotors[planner.rotors[i]].coefficientFactor;
+	}
+	return totalExpansion;
 }
 
 function getThroughputLeniencyMult() {
-	return Math.min(turbine_throughput_efficiency_leniency, ideal_total_expansion_level[planner.steam] <= 1 || maxBladeExpansionCoefficient() <= 1 ? Number.MAX_VALUE : Math.ceil(Math.log(ideal_total_expansion_level[planner.steam]) / Math.log(maxBladeExpansionCoefficient())));
+	return Math.min(planner.config.turbine_throughput_efficiency_leniency, planner.config.ideal_total_expansion_level[planner.steam] <= 1 || maxBladeExpansionCoefficient() <= 1 ? Number.MAX_VALUE : Math.ceil(Math.log(planner.config.ideal_total_expansion_level[planner.steam]) / Math.log(maxBladeExpansionCoefficient())));
 }
 
 function getExpansionIdealityMultiplier(ideal, actual) {
@@ -80,18 +80,18 @@ function getDynamoCoilEfficiency() {
 }
 
 function getThroughputEfficiency() {
-	let absoluteLeniency = getBladeArea() * getThroughputLeniencyMult() * turbine_mb_per_blade;
+	let absoluteLeniency = getBladeArea() * getThroughputLeniencyMult() * planner.config.turbine_mb_per_blade;
 	return getMaxRecipeRate() == 0 ? 1 : Math.min(1, (getMaxRecipeRate() + absoluteLeniency) / getMaxRecipeRate());
 }
 
 
 function getTotalPower() {
-	let base = turbine_power_per_mb[planner.steam] * getMaxRecipeRate();
-	base *= getExpansionIdealityMultiplier(ideal_total_expansion_level[planner.steam], getTotalExpansionLevel());
+	let base = planner.config.turbine_power_per_mb[planner.steam] * getMaxRecipeRate();
+	base *= getExpansionIdealityMultiplier(planner.config.ideal_total_expansion_level[planner.steam], getTotalExpansionLevel());
 	base *= getRotorEfficiency();
 	base *= getDynamoCoilEfficiency();
 	base *= getThroughputEfficiency();
 	base *= 1 + getMaxRecipeRate() / 691200;
-	base *= turbine_power_bonus_multiplier;
+	base *= planner.config.turbine_power_bonus_multiplier;
 	return Math.round(base);
 }

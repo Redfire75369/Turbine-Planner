@@ -13,8 +13,8 @@ class DynamoCoil {
 }
 
 function selectRotor(rotor) {
-	document.getElementById("rotor_" + planner.activeRotor).parentElement.className = "turbinebox border";
-	document.getElementById("rotor_" + rotor).parentElement.className = "turbinebox border selected";
+	document.getElementById("rotor_" + planner.activeRotor).parentElement.className = "tooltip turbinebox border";
+	document.getElementById("rotor_" + rotor).parentElement.className = "tooltip turbinebox border selected";
 	planner.activeRotor = rotor;
 }
 function setRotor(shaftPos) {
@@ -22,10 +22,8 @@ function setRotor(shaftPos) {
 }
 
 function selectCoil(coil) {
-	document.getElementById("coil_" + planner.activeCoil).className = "flex__col turbinebox turbinecoil border " + planner.activeCoil;
-	document.getElementById("coil_" + coil).className = "flex__col turbinebox turbinecoil border selected " + coil;
-	document.getElementById("coil_desc_" + planner.activeCoil).style.display = "none";
-	document.getElementById("coil_desc_" + coil).style.display = "block";
+	document.getElementById("coil_" + planner.activeCoil).className = "flex__col tooltip turbinebox turbinecoil border " + planner.activeCoil;
+	document.getElementById("coil_" + coil).className = "flex__col tooltip turbinebox turbinecoil border selected " + coil;
 	planner.activeCoil = coil;
 }
 function setCoil(x, y) {

@@ -1,4 +1,13 @@
 function updateUIBlades() {
+	document.getElementById("rotor_eff_steel").innerText = (rotors["steel"].efficiency * 100).toFixed(2);
+	document.getElementById("rotor_eff_extreme").innerText = (rotors["extreme"].efficiency * 100).toFixed(2);
+	document.getElementById("rotor_eff_sicsiccmc").innerText = (rotors["sicsiccmc"].efficiency * 100).toFixed(2);
+
+	document.getElementById("rotor_exp_steel").innerText = (rotors["steel"].coefficientFactor * 100).toFixed(2);
+	document.getElementById("rotor_exp_extreme").innerText = (rotors["extreme"].coefficientFactor * 100).toFixed(2);
+	document.getElementById("rotor_exp_sicsiccmc").innerText = (rotors["sicsiccmc"].coefficientFactor * 100).toFixed(2);
+	document.getElementById("rotor_exp_stator").innerText = (rotors["stator"].coefficientFactor * 100).toFixed(2);
+	
 	let start = planner.diameter % 2 == 0 ? planner.diameter / 2 - (planner.bearingDiameter / 2) + 1 : (planner.diameter + 1) / 2 - (planner.bearingDiameter + 1) / 2 + 1;
 	for (let i = 1; i < planner.length + 1; i++) {
 		for (let j = 1; j < planner.diameter + 1; j++) {

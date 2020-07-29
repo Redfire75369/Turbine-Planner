@@ -1,3 +1,13 @@
+table {
+	text-align: center;
+}
+tr {
+	text-align: center;
+}
+td {
+	text-align: center;
+}
+
 .flex__col {
 	display: flex;
 	flex-direction: column;
@@ -22,6 +32,44 @@
 
 .flex--center {
 	align-items: center;
+}
+
+.tooltip {
+	position: relative;
+	display: inline-block;
+	border: 1px solid #000000;
+}
+
+.tooltip .tooltiptext {
+	position: absolute;
+	background-color: #000000;
+	color: #FFFFFF;
+	visibility: hidden;
+	data-html: true;
+	z-index: 2;
+}
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+}
+
+.tooltiptext.turbine {
+	width: 120px;
+	bottom: 105%;
+	left: 50%;
+	margin-left: -60px;
+	padding: 5px;
+	color: #FFFFFF;
+	text-align: center;
+}
+
+.navibtn {
+	width: 180px;
+	height: 40px;
+	font-size: 20px;
+	border-width: 2px;
+	border-style: solid;
+	border-radius: 4px;
+	margin: 2px;
 }
 
 #blades_row {
@@ -140,21 +188,4 @@
 }
 .turbinecoil.silver {
 	background-color: #CCCCCC;
-}
-
-.desc {
-	display: flex;
-	min-width: 98vw;
-	max-width: 98vw;
-	min-height: 200px;
-	max-height: 200px;
-	background-color: #B6B6B6;
-	border-radius: 8px;
-	align-items: center;
-	justify-content: center;
-	padding: auto;
-}
-.coildesc {
-	display: flex;
-	position: relative;
 }
