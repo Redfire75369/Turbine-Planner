@@ -1,18 +1,18 @@
 function submitRotorConfig() {
 	rotors["steel"].efficiency = parseFloat(document.getElementById("config_rotor_eff_steel").value);
 	rotors["extreme"].efficiency = parseFloat(document.getElementById("config_rotor_eff_extreme").value);
-	rotors["sicsiccmc"].efficiency = parseFloat(document.getElementById("config_rotor_eff_sicsiccmc").value);
+	rotors["sic_sic_cmc"].efficiency = parseFloat(document.getElementById("config_rotor_eff_sic_sic_cmc").value);
 	
 	rotors["steel"].expansion = parseFloat(document.getElementById("config_rotor_exp_steel").value);
 	rotors["extreme"].expansion = parseFloat(document.getElementById("config_rotor_exp_extreme").value);
-	rotors["sicsiccmc"].expansion = parseFloat(document.getElementById("config_rotor_exp_sicsiccmc").value);
+	rotors["sic_sic_cmc"].expansion = parseFloat(document.getElementById("config_rotor_exp_sic_sic_cmc").value);
 	rotors["stator"].expansion = parseFloat(document.getElementById("config_rotor_exp_stator").value);
 }
 
 function submitCoilConfig() {
 	coils["magnesium"].efficiency = parseFloat(document.getElementById("config_coil_eff_magnesium").value);
 	coils["beryllium"].efficiency = parseFloat(document.getElementById("config_coil_eff_beryllium").value);
-	coils["aluminium"].efficiency = parseFloat(document.getElementById("config_coil_eff_aluminium").value);
+	coils["aluminum"].efficiency = parseFloat(document.getElementById("config_coil_eff_aluminum").value);
 	coils["gold"].efficiency = parseFloat(document.getElementById("config_coil_eff_gold").value);
 	coils["copper"].efficiency = parseFloat(document.getElementById("config_coil_eff_copper").value);
 	coils["silver"].efficiency = parseFloat(document.getElementById("config_coil_eff_silver").value);

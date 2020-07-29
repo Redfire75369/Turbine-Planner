@@ -1,11 +1,11 @@
 function updateUIBlades() {
 	document.getElementById("rotor_eff_steel").innerText = (rotors["steel"].efficiency * 100).toFixed(2);
 	document.getElementById("rotor_eff_extreme").innerText = (rotors["extreme"].efficiency * 100).toFixed(2);
-	document.getElementById("rotor_eff_sicsiccmc").innerText = (rotors["sicsiccmc"].efficiency * 100).toFixed(2);
+	document.getElementById("rotor_eff_sic_sic_cmc").innerText = (rotors["sic_sic_cmc"].efficiency * 100).toFixed(2);
 
 	document.getElementById("rotor_exp_steel").innerText = (rotors["steel"].coefficientFactor * 100).toFixed(2);
 	document.getElementById("rotor_exp_extreme").innerText = (rotors["extreme"].coefficientFactor * 100).toFixed(2);
-	document.getElementById("rotor_exp_sicsiccmc").innerText = (rotors["sicsiccmc"].coefficientFactor * 100).toFixed(2);
+	document.getElementById("rotor_exp_sic_sic_cmc").innerText = (rotors["sic_sic_cmc"].coefficientFactor * 100).toFixed(2);
 	document.getElementById("rotor_exp_stator").innerText = (rotors["stator"].coefficientFactor * 100).toFixed(2);
 	
 	let start = planner.diameter % 2 == 0 ? planner.diameter / 2 - (planner.bearingDiameter / 2) + 1 : (planner.diameter + 1) / 2 - (planner.bearingDiameter + 1) / 2 + 1;
@@ -32,7 +32,7 @@ function updateUIBlades() {
 function updateUICoils() {
 	document.getElementById("coil_eff_magnesium").innerText = (coils["magnesium"].efficiency * 100).toFixed(2);
 	document.getElementById("coil_eff_beryllium").innerText = (coils["beryllium"].efficiency * 100).toFixed(2);
-	document.getElementById("coil_eff_aluminium").innerText = (coils["aluminium"].efficiency * 100).toFixed(2);
+	document.getElementById("coil_eff_aluminum").innerText = (coils["aluminum"].efficiency * 100).toFixed(2);
 	document.getElementById("coil_eff_gold").innerText = (coils["gold"].efficiency * 100).toFixed(2);
 	document.getElementById("coil_eff_copper").innerText = (coils["copper"].efficiency * 100).toFixed(2);
 	document.getElementById("coil_eff_silver").innerText = (coils["silver"].efficiency * 100).toFixed(2);

@@ -35,19 +35,19 @@ var activeCoils = [];
 const rotors = {
 	steel: new TurbineBlade("steel", 1, 1.4),
 	extreme: new TurbineBlade("extreme", 1.1, 1.6),
-	sicsiccmc: new TurbineBlade("sicsiccmc", 1.2, 1.8),
+	sic_sic_cmc: new TurbineBlade("sic_sic_cmc", 1.2, 1.8),
 	stator: new TurbineBlade("stator", 0, 0.75)
 };
 const coils = {
-	none: new DynamoCoil("none", 0),
-	bearing: new DynamoCoil("bearing", 0),
-	connector: new DynamoCoil("connector", 0),
-	magnesium: new DynamoCoil("magnesium", 0.86),
-	beryllium: new DynamoCoil("beryllium", 0.9),
-	aluminium: new DynamoCoil("aluminium", 0.98),
-	gold: new DynamoCoil("gold", 1.04),
-	copper: new DynamoCoil("copper", 1.1),
-	silver: new DynamoCoil("silver", 1.12)
+	none: new DynamoCoil("none", 0, parseRule("at least four none coils")),
+	bearing: new DynamoCoil("bearing", 0, parseRule("at least zero magnesium coils")),
+	connector: new DynamoCoil("connector", 0, parseRule("at least one of any coil")),
+	magnesium: new DynamoCoil("magnesium", 0.86, parseRule("at least one bearing")),
+	beryllium: new DynamoCoil("beryllium", 0.9, parseRule("at least one magnesium coil")),
+	aluminum: new DynamoCoil("aluminum", 0.98, parseRule("at least two magnesium coils")),
+	gold: new DynamoCoil("gold", 1.04, parseRule("at least one aluminum coil")),
+	copper: new DynamoCoil("copper", 1.1, parseRule("at least one beryllium coil")),
+	silver: new DynamoCoil("silver", 1.12, parseRule("at least one gold coil && at least one copper coil"))
 };
 
 function refreshTurbine() {

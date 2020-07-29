@@ -54,7 +54,7 @@ td {
 
 .tooltiptext.turbine {
 	width: 120px;
-	bottom: 105%;
+	top: 105%;
 	left: 50%;
 	margin-left: -60px;
 	padding: 5px;
@@ -137,7 +137,7 @@ td {
 .turbinerotor.extreme {
 	background-color: #782A50;
 }
-.turbinerotor.sicsiccmc {
+.turbinerotor.sic_sic_cmc {
 	background-color: #807C6E
 }
 .turbinerotor.stator {
@@ -177,7 +177,7 @@ td {
 .turbinecoil.beryllium {
 	background-color: #BBCCAA;
 }
-.turbinecoil.aluminium {
+.turbinecoil.aluminum {
 	background-color: #CCDDCC;
 }
 .turbinecoil.gold {

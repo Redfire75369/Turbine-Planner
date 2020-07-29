@@ -6,9 +6,10 @@ class TurbineBlade {
 	}
 }
 class DynamoCoil {
-	constructor(name, eff = 1) {
+	constructor(name, eff = 1, ruleSet = new DynamoCoilRuleSet()) {
 		this.name = name;
 		this.efficiency = eff;
+		this.ruleSet = ruleSet;
 	}
 }
 
@@ -36,34 +37,7 @@ function setCoil(x, y) {
 function activeDynamoCoils() {
 	for (let i = 1; i < planner.diameter + 1; i++) {
 		for (let j = 1; j < planner.diameter + 1; j++) {
-			switch (planner.coils[j - 1][i - 1]) {
-				case "bearing":
-					activeCoils[j - 1][i - 1] = true;
-					break;
-				case "connector":
-					activeCoils[j - 1][i - 1] = atLeast(1, "magnesium", i - 1, j - 1) || atLeast(1, "beryllium", i - 1, j - 1) || atLeast(1, "aluminium", i - 1, j - 1) || atLeast(1, "copper", i - 1, j - 1) || atLeast(1, "gold", i - 1, j - 1) || atLeast(1, "silver", i - 1, j - 1);
-					break;
-				case "magnesium":
-					activeCoils[j - 1][i - 1] = atLeast(1, "bearing", i - 1, j - 1) || atLeast(1, "connector", i - 1, j - 1);
-					break;
-				case "beryllium":
-					activeCoils[j - 1][i - 1] = atLeast(1, "magnesium", i - 1, j - 1);
-					break;
-				case "aluminium":
-					activeCoils[j - 1][i - 1] = atLeast(2, "magnesium", i - 1, j - 1);
-					break;
-				case "gold":
-					activeCoils[j - 1][i - 1] = atLeast(1, "aluminium", i - 1, j - 1);
-					break;
-				case "copper":
-					activeCoils[j - 1][i - 1] = atLeast(1, "beryllium", i - 1, j - 1);
-					break;
-				case "silver":
-					activeCoils[j - 1][i - 1] = atLeast(1, "copper", i - 1, j - 1) && atLeast(1, "gold", i - 1, j - 1);
-					break;
-				default:
-					activeCoils[j - 1][i - 1] = false;
-			}
+			activeCoils[j - 1][i - 1] = interpretRuleSet(coils[planner.coils[j - 1][i - 1]].ruleSet, i - 1, j - 1);
 		}
 	}
 }
@@ -139,25 +113,4 @@ function keyIntoActivation(key, x, y) {
 		default:
 			return false;
 	}
-}
-
-function atLeast(amount, type, x, y) {
-	let adjacent = getHorizontalCoils(x, y);
-	let keys = Object.keys(adjacent);
-	let bool = true;
-	let activated = true;
-	let key = 4;
-	for (let i = 0; i < amount; i++) {
-		key = Object.keys(adjacent).filter(key => adjacent[key] == type)[0];
-		bool &= adjacent[key] == type;
-		activated &= keyIntoActivation(key, x, y);
-		for (let j = 0; j < 4 && !keyIntoActivation(key, x, y); j++) {
-			adjacent[key] = undefined;
-			key = Object.keys(adjacent).filter(key => adjacent[key] == type)[0];
-			bool &= adjacent[key] == type;
-			activated = keyIntoActivation(key, x, y);
-		}
-		adjacent[key] = undefined;
-	}
-	return bool && activated;
 }
