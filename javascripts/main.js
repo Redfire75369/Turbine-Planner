@@ -33,21 +33,21 @@ var planner = getDefaultData();
 var activeCoils = [];
 
 const rotors = {
-	steel: new TurbineBlade("steel", 1, 1.4),
-	extreme: new TurbineBlade("extreme", 1.1, 1.6),
-	sic_sic_cmc: new TurbineBlade("sic_sic_cmc", 1.2, 1.8),
-	stator: new TurbineBlade("stator", 0, 0.75)
+	steel: new TurbineBlade("steel", 1, 1.4, "Steel"),
+	extreme: new TurbineBlade("extreme", 1.1, 1.6, "Extreme"),
+	sic_sic_cmc: new TurbineBlade("sic_sic_cmc", 1.2, 1.8, "SiC SiC CMC"),
+	stator: new TurbineBlade("stator", 0, 0.75, "Stator")
 };
 const coils = {
-	none: new DynamoCoil("none", 0, parseRule("at least four none coils")),
-	bearing: new DynamoCoil("bearing", 0, parseRule("at least zero magnesium coils")),
-	connector: new DynamoCoil("connector", 0, parseRule("at least one of any coil")),
-	magnesium: new DynamoCoil("magnesium", 0.86, parseRule("at least one bearing")),
-	beryllium: new DynamoCoil("beryllium", 0.9, parseRule("at least one magnesium coil")),
-	aluminum: new DynamoCoil("aluminum", 0.98, parseRule("at least two magnesium coils")),
-	gold: new DynamoCoil("gold", 1.04, parseRule("at least one aluminum coil")),
-	copper: new DynamoCoil("copper", 1.1, parseRule("at least one beryllium coil")),
-	silver: new DynamoCoil("silver", 1.12, parseRule("at least one gold coil && at least one copper coil"))
+	none: new DynamoCoil("none", 0, parseRules("four none coils"), "Turbine Casing" ),
+	bearing: new DynamoCoil("bearing", 0, parseRules("zero magnesium coils"), "Rotor Bearing"),
+	connector: new DynamoCoil("connector", 0, parseRules("one of any coil"), "Dynamo Coil Connector"),
+	magnesium: new DynamoCoil("magnesium", 0.86, parseRules("one bearing || one connector"), "Magnesium Dynamo Coil"),
+	beryllium: new DynamoCoil("beryllium", 0.9, parseRules("one magnesium coil"), "Beryllium Dynamo Coil"),
+	aluminum: new DynamoCoil("aluminum", 0.98, parseRules("two magnesium coils"), "Aluminum Dynamo Coil"),
+	gold: new DynamoCoil("gold", 1.04, parseRules("one aluminum coil"), "Gold Dynamo Coil"),
+	copper: new DynamoCoil("copper", 1.1, parseRules("one beryllium coil"), "Copper Dynamo Coil"),
+	silver: new DynamoCoil("silver", 1.12, parseRules("one gold coil && one copper coil"), "Silver Dynamo Coil")
 };
 
 function refreshTurbine() {

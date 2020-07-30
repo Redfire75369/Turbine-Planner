@@ -55,12 +55,12 @@
 			<div class="flex__row justify">
 				<div onclick="selectCoil('none')" id="coil_none" class="flex__col tooltip turbinebox turbinecoil border none"><span class="tooltiptext turbine">Turbine Casing</span></div>
 				<div onclick="selectCoil('connector')" id="coil_connector" class="flex__col tooltip turbinebox turbinecoil border connector"><span class="tooltiptext turbine">Dynamo Coil Connector</span></div>
-				<div onclick="selectCoil('magnesium')" id="coil_magnesium" class="flex__col tooltip turbinebox turbinecoil border magnesium"><span class="tooltiptext turbine">Magnesium Dynamo Coil<br/>Efficiency: <span id="coil_eff_magnesium">86</span>%<br/>Adjacent to at least 1 Rotor Bearing</span></div>
-				<div onclick="selectCoil('beryllium')" id="coil_beryllium" class="flex__col tooltip turbinebox turbinecoil border beryllium"><span class="tooltiptext turbine">Beryllium Dynamo Coil<br/>Efficiency: <span id="coil_eff_beryllium">90</span>%<br/>Adjacent to at least 1 Magnesium Dynamo Coil</span></div>
-				<div onclick="selectCoil('aluminum')" id="coil_aluminum" class="flex__col tooltip turbinebox turbinecoil border aluminum"><span class="tooltiptext turbine">aluminum Dynamo Coil<br/>Efficiency: <span id="coil_eff_aluminum">98</span>%<br/>Adjacent to at least 2 Magnesium Dynamo Coils</span></div>
-				<div onclick="selectCoil('gold')" id="coil_gold" class="flex__col tooltip turbinebox turbinecoil border gold"><span class="tooltiptext turbine">Gold Dynamo Coil<br/>Efficiency: <span id="coil_eff_gold">104</span>%<br/>Adjacent to at least 1 aluminum Dynamo Coil</span></div>
-				<div onclick="selectCoil('copper')" id="coil_copper" class="flex__col tooltip turbinebox turbinecoil border copper"><span class="tooltiptext turbine">Copper Dynamo Coil<br/>Efficiency: <span id="coil_eff_copper">110</span>%<br/>Adjacent to at least 1 Beryllium Dynamo Coil</span></div>
-				<div onclick="selectCoil('silver')" id="coil_silver" class="flex__col tooltip turbinebox turbinecoil border silver"><span class="tooltiptext turbine">Silver Dynamo Coil<br/>Efficiency: <span id="coil_eff_silver">112</span>%<br/>Adjacent to at least 1 Gold and 1 Silver Dynamo Coil</span></div>
+				<div onclick="selectCoil('magnesium')" id="coil_magnesium" class="flex__col tooltip turbinebox turbinecoil border magnesium"><span class="tooltiptext turbine">Magnesium Dynamo Coil<br/>Efficiency: <span id="coil_eff_magnesium"></span>%<br/><span id="coil_rule_magnesium"></span></span></div>
+				<div onclick="selectCoil('beryllium')" id="coil_beryllium" class="flex__col tooltip turbinebox turbinecoil border beryllium"><span class="tooltiptext turbine">Beryllium Dynamo Coil<br/>Efficiency: <span id="coil_eff_beryllium"></span>%<br/><span id="coil_rule_beryllium"></span></span></div>
+				<div onclick="selectCoil('aluminum')" id="coil_aluminum" class="flex__col tooltip turbinebox turbinecoil border aluminum"><span class="tooltiptext turbine">Aluminum Dynamo Coil<br/>Efficiency: <span id="coil_eff_aluminum"></span>%<br/><span id="coil_rule_aluminum"></span></span></div>
+				<div onclick="selectCoil('gold')" id="coil_gold" class="flex__col tooltip turbinebox turbinecoil border gold"><span class="tooltiptext turbine">Gold Dynamo Coil<br/>Efficiency: <span id="coil_eff_gold"></span>%<br/><span id="coil_rule_gold"></span></span></div>
+				<div onclick="selectCoil('copper')" id="coil_copper" class="flex__col tooltip turbinebox turbinecoil border copper"><span class="tooltiptext turbine">Copper Dynamo Coil<br/>Efficiency: <span id="coil_eff_copper"></span>%<br/><span id="coil_rule_copper"></span></span></div>
+				<div onclick="selectCoil('silver')" id="coil_silver" class="flex__col tooltip turbinebox turbinecoil border silver"><span class="tooltiptext turbine">Silver Dynamo Coil<br/>Efficiency: <span id="coil_eff_silver"></span>%<br/><span id="coil_rule_silver"></span></span></div>
 			</div>
 		</div>
 		<div id="config">
@@ -102,30 +102,37 @@
 						<tr>
 							<td>Dynamo Coil</td>
 							<td>Efficiency</td>
+							<td>Placement Rule</td>
 						</tr>
 						<tr>
 							<td><label>Magnesium:</label></div>
 							<td><input type="text" id="config_coil_eff_magnesium" value="0.86"></input></td>
+							<td><input type="text" id="config_coil_rule_magnesium" value="one bearing || one connector"></input></td>
 						</tr>
 						<tr>
 							<td><label>Beryllium:</label></div>
 							<td><input type="text" id="config_coil_eff_beryllium" value="0.90"></input></td>
+							<td><input type="text" id="config_coil_rule_beryllium" value="one magnesium"></input></td>
 						</tr>
 						<tr>
 							<td><label>aluminum:</label></div>
 							<td><input type="text" id="config_coil_eff_aluminum" value="0.98"></input></td>
+							<td><input type="text" id="config_coil_rule_aluminum" value="two magnesium"></input></td>
 						</tr>
 						<tr>
 							<td><label>Gold:</label></div>
 							<td><input type="text" id="config_coil_eff_gold" value="1.04"></input></td>
+							<td><input type="text" id="config_coil_rule_gold" value="one aluminum"></input></td>
 						</tr>
 						<tr>
 							<td><label>Copper:</label></div>
 							<td><input type="text" id="config_coil_eff_copper" value="1.10"></input></td>
+							<td><input type="text" id="config_coil_rule_copper" value="one beryllium"></input></td>
 						</tr>
 						<tr>
 							<td><label>Silver:</label></div>
 							<td><input type="text" id="config_coil_eff_silver" value="1.12"></input></td>
+							<td><input type="text" id="config_coil_rule_silver" value="one gold && one silver"></input></td>
 						</tr>
 					</table>
 					<button onclick="submitCoilConfig()">Update Coil Configuration</button>

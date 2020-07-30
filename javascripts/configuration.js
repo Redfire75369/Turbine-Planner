@@ -16,6 +16,13 @@ function submitCoilConfig() {
 	coils["gold"].efficiency = parseFloat(document.getElementById("config_coil_eff_gold").value);
 	coils["copper"].efficiency = parseFloat(document.getElementById("config_coil_eff_copper").value);
 	coils["silver"].efficiency = parseFloat(document.getElementById("config_coil_eff_silver").value);
+
+	coils["magnesium"].ruleSet = parseRules(document.getElementById("config_coil_rule_magnesium").value);
+	coils["beryllium"].ruleSet = parseRules(document.getElementById("config_coil_rule_beryllium").value);
+	coils["aluminum"].ruleSet = parseRules(document.getElementById("config_coil_rule_aluminum").value);
+	coils["gold"].ruleSet = parseRules(document.getElementById("config_coil_rule_gold").value);
+	coils["copper"].ruleSet = parseRules(document.getElementById("config_coil_rule_copper").value);
+	coils["silver"].ruleSet = parseRules(document.getElementById("config_coil_rule_silver").value);
 }
 
 function submitOtherConfig() {

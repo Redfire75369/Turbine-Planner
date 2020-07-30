@@ -3,6 +3,7 @@ class PlacementRule {
 		this.type = "at least";
 		this.requirement = "bearing";
 		this.amount = 1;
+		this.axial = false;
 	}
 }
 
@@ -21,7 +22,7 @@ const numbers = {
 	"four": 4
 };
 
-function parseRule(baseRule) {
+function parseRules(baseRule) {
 	baseRule = baseRule.toLowerCase();
 
 	let ruleSet = new DynamoCoilRuleSet();
@@ -34,10 +35,11 @@ function parseRule(baseRule) {
 		}
 
 		let rule = new PlacementRule();
-		rule.type = i.includes("axial") ? "axial" : i.includes("exactly") ? "exactly" : i.includes("at most") ? "at most" : "at least";
+		rule.type = i.includes("exactly") ? "exactly" : i.includes("at most") ? "at most" : "at least";
+		rule.axial = i.includes("axial");
 
 		i.trim().split(" ").forEach(function(j) {
-			if (j == "at" || j == "least" || j == "exactly" || j == "most" || j == "axial"  || j == "of" || j == "coil" || j == "coils") {
+			if (j == "at" || j == "least" || j == "exactly" || j == "most" || j == "axial"  || j == "of" || j == "dynamo" || j == "coil" || j == "coils") {
 				return;
 			}
 			if (Object.keys(numbers).includes(j)) {
@@ -46,7 +48,7 @@ function parseRule(baseRule) {
 			}
 			rule.requirement = j;
 		});
-		if (rule.type == "axial ") {
+		if (rule.axial) {
 			rule.count = 2;
 		}
 		
@@ -56,21 +58,26 @@ function parseRule(baseRule) {
 	return ruleSet;
 }
 
-console.log(JSON.stringify(parseRule("one graphite coil || one magnesium coil")));
-
 function interpretRuleSet(ruleSet, x, y) {
 	let output = ruleSet.var == "&&";
 	ruleSet.rules.forEach(function(rule) {
 		if (ruleSet.var == "&&") {
-			output &= placementRule(rule.type, rule.amount, rule.requirement, x, y);
+			output &= placementRule(rule.axial, rule.type, rule.amount, rule.requirement, x, y);
 		} else {
-			output |= placementRule(rule.type, rule.amount, rule.requirement, x, y);
+			output |= placementRule(rule.axial, rule.type, rule.amount, rule.requirement, x, y);
 		}
 	})
 	return output;
 }
 
-function atLeast(amount, requirement, x, y) {
+function placementRule(axial, type, amount, requirement, x, y) {
+	if (requirement == "none") {
+		return false;
+	}
+	return axial ? axial(type, amount, requirement, x, y) : nonAxial(type, amount, requirement, x, y);
+}
+
+function nonAxial(type, amount, requirement, x, y) {
 	let activated = true;
 	let count = 0;
 	let adjacent = getHorizontalCoils(x, y);
@@ -87,51 +94,18 @@ function atLeast(amount, requirement, x, y) {
 			count++;
 		}
 	}
-	return count >= amount;
+	
+	switch (type) {
+		case "at least":
+			return count >= amount;
+		case "exactly":
+			return count == amount;
+		case "at most":
+			return count <= amount;
+	}
 }
 
-function exactly(amount, requirement, x, y) {
-	let activated = true;
-	let key = 4;
-	let count = 0;
-	let adjacent = getHorizontalCoils(x, y);
-	let keys = Object.keys(adjacent);
-	if (requirement != "any") {
-		keys = keys.filter(key => adjacent[key] == requirement);
-	} else {
-		keys = keys.filter(key => adjacent[key] != requirement);
-	}
-
-	for (let i = 0; i < keys.length; i++) {
-		activated = keyIntoActivation(keys[i], x, y);
-		if (activated) {
-			count++;
-		}
-	}
-	return count == amount;
-}
-
-function atMost(amount, requirement, x, y) {
-	let activated = true;
-	let count = 0;
-	let adjacent = getHorizontalCoils(x, y);
-	let keys = Object.keys(adjacent);
-	if (requirement != "any") {
-		keys = keys.filter(key => adjacent[key] == requirement);
-	} else {
-		keys = keys.filter(key => adjacent[key] != requirement);
-	}
-
-	for (let i = 0; i < keys.length; i++) {
-		activated = keyIntoActivation(keys[i], x, y);
-		if (activated) {
-			count++;
-		}
-	}
-	return count <= amount;
-}
-
-function axial(amount, requirement, x, y) {
+function axial(type, amount, requirement, x, y) {
 	let adjacent = getHorizontalCoils(x, y);
 	let axis = [
 		[adjacent[0], adjacent[2]],
@@ -141,28 +115,70 @@ function axial(amount, requirement, x, y) {
 		[0, 2],
 		[1, 3]
 	];
+	amount /= 2;
 
-	let count = 0;
-	for (let i = 0; i < 2 && count < amount; i++) {
+	for (let i = 0; i < 2; i++) {
 		if (axis[i][0] == requirement && axis[i][1] == requirement && keyIntoActivation(keys[i][0], x, y) && keyIntoActivation(keys[i][1], x, y)) {
-			return true;
+			count++;
 		}
 	}
+
+	switch (type) {
+		case "at least":
+			return count >= amount;
+		case "exactly":
+			return count == amount;
+		case "at most":
+			return count <= amount;
+	}
 }
 
-function placementRule(rule, amount, requirement, x, y) {
-	if (requirement == "none") {
-		return false;
+function parseTooltip(ruleSet) {
+	let str = "Must be adjacent to";
+	let bool = ruleSet.var == "||" ? "or" : "and";
+
+	for (let i = 0; i < ruleSet.rules.length; i++) {
+		rule = ruleSet.rules[i];
+		if (i == ruleSet.rules.length - 1) {
+			str += " " + bool + " ";
+		} else if (i == 0) {
+			str += " ";
+		} else {
+			str += ", ";
+		}
+		str += parseSubTooltip(rule);
 	}
-	switch (rule) {
-		case "at least":
-			return atLeast(amount, requirement, x, y);
-		case "exactly":
-			return exactly(amount, requirement, x, y);
-		case "at most":
-			return atMost(amount, requirement, x, y);
-		case "axial":
-			return axial(amount, requirement, x, y);
+
+	str += ".";
+	return str;
+}
+
+function parseSubTooltip(rule) {
+	if (rule.type == "exactly" && rule.amount == 0) {
+		return "absolutely zero " + coils[rule.requirement].displayName + "s";
+	}
+	let str = rule.type + " " + parsePrefix(rule.amount) + " " + coils[rule.requirement].displayName + parseSuffix(rule.amount);
+	if (rule.axial) {
+		str += " along a common axis";
+	}
+	return str;
+}
+
+function parsePrefix(amount) {
+	switch (amount) {
+		case 0:
+			return "no";
+		case 1:
+			return "one";
+		case 2:
+			return "two";
+		case 3:
+			return "three";
+		case 4:
+			return "four";
 	}
 }
-	
+
+function parseSuffix(amount) {
+	return amount == 1 ? "" : "s";
+}

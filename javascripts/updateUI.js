@@ -30,13 +30,13 @@ function updateUIBlades() {
 }
 
 function updateUICoils() {
-	document.getElementById("coil_eff_magnesium").innerText = (coils["magnesium"].efficiency * 100).toFixed(2);
-	document.getElementById("coil_eff_beryllium").innerText = (coils["beryllium"].efficiency * 100).toFixed(2);
-	document.getElementById("coil_eff_aluminum").innerText = (coils["aluminum"].efficiency * 100).toFixed(2);
-	document.getElementById("coil_eff_gold").innerText = (coils["gold"].efficiency * 100).toFixed(2);
-	document.getElementById("coil_eff_copper").innerText = (coils["copper"].efficiency * 100).toFixed(2);
-	document.getElementById("coil_eff_silver").innerText = (coils["silver"].efficiency * 100).toFixed(2);
-	
+	for (let i = 0, ii = Object.keys(coils); i < ii.length; i++) {
+		if (ii[i] !== "none" && ii[i] !== "bearing" && ii[i] !== "connector") {
+			document.getElementById("coil_eff_" + ii[i]).innerText = (coils[ii[i]].efficiency * 100).toFixed(2);
+			document.getElementById("coil_rule_" + ii[i]).innerText = parseTooltip(coils[ii[i]].ruleSet);
+		}
+	}
+
 	activeDynamoCoils();
 	for (let i = 1; i < planner.diameter + 1; i++) {
 		for (let j = 1; j < planner.diameter + 1; j++) {

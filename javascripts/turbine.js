@@ -1,15 +1,17 @@
 class TurbineBlade {
-	constructor(name, minEff, coeff) {
+	constructor(name, minEff, coeff, display) {
 		this.name = name;
 	    this.efficiency = minEff;
 	    this.coefficientFactor = coeff;
+		this.displayName = display;
 	}
 }
 class DynamoCoil {
-	constructor(name, eff = 1, ruleSet = new DynamoCoilRuleSet()) {
+	constructor(name, eff = 1, ruleSet = new DynamoCoilRuleSet(), display) {
 		this.name = name;
 		this.efficiency = eff;
 		this.ruleSet = ruleSet;
+		this.displayName = display;
 	}
 }
 
