@@ -1,7 +1,7 @@
 function getDefaultData() {
 	return {
 		version: "1.12.2-2o.3.2",
-		plannerVersion: "0.4.0",
+		plannerVersion: "0.5.0",
 
 		diameter: 3,
 		length: 3,
@@ -16,11 +16,12 @@ function getDefaultData() {
 			sic_sic_cmc: new TurbineBlade("sic_sic_cmc", 1.2, 1.8, "SiC SiC CMC"),
 			stator: new TurbineBlade("stator", 0, 0.75, "Stator")
 		},
+		customRotorColours: {},
 		activeRotor: "steel",
 
 		coils: [[]],
 		coilTypes: {
-			none: new DynamoCoil("none", 0, parseRules("four none coils"), "Turbine Casing" ),
+			none: new DynamoCoil("none", 0, parseRules("four none coils"), "Turbine Casing"),
 			bearing: new DynamoCoil("bearing", 0, parseRules("zero magnesium coils"), "Rotor Bearing"),
 			connector: new DynamoCoil("connector", 0, parseRules("one of any coil"), "Dynamo Coil Connector"),
 			magnesium: new DynamoCoil("magnesium", 0.86, parseRules("one bearing || one connector"), "Magnesium Dynamo Coil"),
@@ -30,11 +31,8 @@ function getDefaultData() {
 			copper: new DynamoCoil("copper", 1.1, parseRules("one beryllium coil"), "Copper Dynamo Coil"),
 			silver: new DynamoCoil("silver", 1.12, parseRules("one gold coil && one copper coil"), "Silver Dynamo Coil")
 		},
+		customCoilColours: {},
 		activeCoil: "magnesium",
-
-		customRotors: [],
-
-		customCoils: [],
 
 		config: {
 			turbine_power_per_mb: [16, 4, 4],

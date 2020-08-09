@@ -58,10 +58,10 @@ function parseRules(baseRule) {
 		if (rule.axial) {
 			rule.count = 2;
 		}
-		
+
 		return rule;
 	});
-	
+
 	return ruleSet;
 }
 
@@ -109,7 +109,7 @@ function nonAxial(type, amount, requirement, x, y) {
 			count++;
 		}
 	}
-	
+
 	switch (type) {
 		case "at least":
 			return count >= amount;
@@ -154,10 +154,10 @@ function parseTooltip(ruleSet) {
 
 	for (let i = 0; i < ruleSet.rules.length; i++) {
 		rule = ruleSet.rules[i];
-		if (i == ruleSet.rules.length - 1) {
-			str += " " + bool + " ";
-		} else if (i == 0) {
+		if (i == 0) {
 			str += " ";
+		} else if (i == ruleSet.rules.length - 1) {
+			str += " " + bool + " ";
 		} else {
 			str += ", ";
 		}

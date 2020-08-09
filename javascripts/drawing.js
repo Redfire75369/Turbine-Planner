@@ -2,7 +2,7 @@ const bladesDiv = document.getElementById("blades_row");
 const coilsDiv = document.getElementById("coils_row");
 
 function drawTurbine(diameter, length) {
-	if (diameter < 3 || length < 3 || diameter > 48 || length > 48) {
+	if (diameter < 3 || length < 1 || diameter > 48 || length > 48) {
 		alert("Invalid Turbine Dimensions");
 		return;
 	}

@@ -86,7 +86,7 @@ function checkAssign(check, assignFrom, assignTo = []) {
 				checkAssign(check[i], assignFrom[i], assignTo.concat([i]));
 			}
 		} else if (typeof check == "object" && !checkObj(check)) {
-			for (let i = 0, ii = Object.keys(check); i < ii.length; i++) {
+			for (let i = 0, ii = Object.keys(assignFrom); i < ii.length; i++) {
 				checkAssign(check[ii[i]], assignFrom[ii[i]], assignTo.concat([ii[i]]));
 			}
 		} else {
@@ -96,7 +96,9 @@ function checkAssign(check, assignFrom, assignTo = []) {
 				output = output[assignTo[i]];
 				type = type[assignTo[i]];
 			}
-			output[assignTo[assignTo.length - 1]] = objectify(assignFrom, type[assignTo[assignTo.length - 1]]);
+			if (assignTo.length > 0) {
+				output[assignTo[assignTo.length - 1]] = objectify(assignFrom, type[assignTo[assignTo.length - 1]]);
+			}
 		}
 	} else {
 		let output = planner;
@@ -105,7 +107,7 @@ function checkAssign(check, assignFrom, assignTo = []) {
 			output = output[assignTo[i]];
 			def = def[assignTo[i]];
 		}
-		output[assignTo[assignTo.length - 1]] = def;
+		output[assignTo[assignTo.length - 1]] = def[assignTo[assignTo.length - 1]];
 	}
 }
 

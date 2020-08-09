@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<title>NuclearCraft: Overhauled Turbine Planner</title>
 		<link rel="stylesheet" href="stylesheets/universal.css"/>
+		<style id="customstyles"></style>
 
 		<script defer src="javascripts/libs/LZString.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/libs/clipboard.js" charset="utf-8" type="text/javascript"></script>
@@ -15,6 +16,7 @@
 		<script defer src="javascripts/configuration.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/saveload.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/navigation.js" charset="utf-8" type="text/javascript"></script>
+		<script defer src="javascripts/custom.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/main.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/init_game.js" charset="utf-8" type="text/javascript"></script>
 	</head>
@@ -38,11 +40,12 @@
 			</div>
 		</div><br/>
 		<div id="navigation" class="justify">
-			<div class="flex__row" style="width: 800px">
+			<div class="flex__row" style="width: 1000px">
 				<div class="flex__col"><button onclick="showNaviTab('blades')" id="blades_navibtn"class="navibtn">Turbine Blades</button></div>
 				<div class="flex__col"><button onclick="showNaviTab('coils')" id="coils_navibtn" class="navibtn">Dynamo Coils</button></div>
 				<div class="flex__col"><button onclick="showNaviTab('config')" id="config_navibtn" class="navibtn">Configuration</button></div>
 				<div class="flex__col"><button onclick="showNaviTab('options')" id="options_navibtn" class="navibtn">Options</button></div>
+				<div class="flex__col"><button onclick="showNaviTab('custom_content')" id="custom_content_navibtn" class="navibtn">Custom Content</button></div>
 			</div>
 		</div><br/>
 		<div id="blades">
@@ -196,6 +199,63 @@
 			</div>
 			<div class="flex__row">
 				<button onclick="submitOtherConfig()">Update Steam and Other Configuration</button>
+			</div>
+		</div>
+
+		<div id="custom_content">
+			<div class="flex__row">
+				<div class="flex__col">
+					<b>Add New Rotor</b>
+					<table>
+						<tr>
+							<td><label>Name: </label></td>
+							<td><input type="text" id="add_new_rotor_name"></input></button>
+						</tr>
+						<tr>
+							<td><label>Efficiency: </label></td>
+							<td><input type="text" id="add_new_rotor_eff"></input></button>
+						</tr>
+						<tr>
+							<td><label>Expansion Coefficient: </label></td>
+							<td><input type="text" id="add_new_rotor_exp"></input></button>
+						</tr>
+						<tr>
+							<td><label>Display Name: </label></td>
+							<td><input type="text" id="add_new_rotor_display"></input></button>
+						</tr>
+						<tr>
+							<td><label>Colour: </label></td>
+							<td><input type="text" id="add_new_rotor_colour"></input></button>
+						</tr>
+					</table>
+					<button onclick="newRotor(document.getElementById('add_new_rotor_name').value, parseFloat(document.getElementById('add_new_rotor_eff').value), parseFloat(document.getElementById('add_new_rotor_exp').value), document.getElementById('add_new_rotor_display').value, document.getElementById('add_new_rotor_colour').value)">Add New Rotor</button>
+				</div>
+				<div class="flex__col">
+					<b>Add New Coil</b>
+					<table>
+						<tr>
+							<td><label>Name: </label></td>
+							<td><input type="text" id="add_new_coil_name"></input></button>
+						</tr>
+						<tr>
+							<td><label>Efficiency: </label></td>
+							<td><input type="text" id="add_new_coil_eff"></input></button>
+						</tr>
+						<tr>
+							<td><label>Placement Rule: </label></td>
+							<td><input type="text" id="add_new_coil_rule"></input></button>
+						</tr>
+						<tr>
+							<td><label>Display Name: </label></td>
+							<td><input type="text" id="add_new_coil_display"></input></button>
+						</tr>
+						<tr>
+							<td><label>Colour: </label></td>
+							<td><input type="text" id="add_new_coil_colour"></input></button>
+						</tr>
+					</table>
+					<button onclick="newCoil(document.getElementById('add_new_coil_name').value, parseFloat(document.getElementById('add_new_coil_eff').value), document.getElementById('add_new_coil_rule').value, document.getElementById('add_new_coil_display').value, document.getElementById('add_new_coil_colour').value)">Add New Coil</button>
+				</div>
 			</div>
 		</div>
 		<div id="options" class="justify" style="width: 1080px">
