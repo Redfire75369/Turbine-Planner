@@ -5,20 +5,25 @@
 		<title>NuclearCraft: Overhauled Turbine Planner</title>
 		<link rel="stylesheet" href="stylesheets/universal.css"/>
 
+		<script defer src="javascripts/libs/LZString.js" charset="utf-8" type="text/javascript"></script>
+		<script defer src="javascripts/libs/clipboard.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/turbine.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/rules.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/drawing.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/updateUI.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/calculations.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/configuration.js" charset="utf-8" type="text/javascript"></script>
+		<script defer src="javascripts/saveload.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/navigation.js" charset="utf-8" type="text/javascript"></script>
 		<script defer src="javascripts/main.js" charset="utf-8" type="text/javascript"></script>
+		<script defer src="javascripts/init_game.js" charset="utf-8" type="text/javascript"></script>
 	</head>
 	<body>
 		<div class="flex__row">
 			<div id="information" class="flex__col">
 				<a>This turbine can safely produce up to <span id="power"></span> RF/t.</a>
 				<a>Maximum Input Rate: <span id="steam"></span> mB/t</a>
+				<a>Effective RF/mB: <span id="effective_rf_per_mb"></span> mB/t</a>
 				<a>Rotor Efficiency: <span id="rotor_eff"></span> %</a>
 				<a>Dynamo Coil Efficiency: <span id="dynamo_coil_eff"></span> %</a>
 				<a>Throughput Efficiency: <span id="throughput_eff"></span> %</a>
@@ -32,11 +37,12 @@
 				<div class="flex__row"><button onclick="drawBearing(parseInt(document.getElementById('bearingDiameter').value))">Update Turbine with new Dimensions</button></div>
 			</div>
 		</div><br/>
-		<div id="navigation">
-			<div class="flex__row">
+		<div id="navigation" class="justify">
+			<div class="flex__row" style="width: 800px">
 				<div class="flex__col"><button onclick="showNaviTab('blades')" id="blades_navibtn"class="navibtn">Turbine Blades</button></div>
 				<div class="flex__col"><button onclick="showNaviTab('coils')" id="coils_navibtn" class="navibtn">Dynamo Coils</button></div>
 				<div class="flex__col"><button onclick="showNaviTab('config')" id="config_navibtn" class="navibtn">Configuration</button></div>
+				<div class="flex__col"><button onclick="showNaviTab('options')" id="options_navibtn" class="navibtn">Options</button></div>
 			</div>
 		</div><br/>
 		<div id="blades">
@@ -86,7 +92,7 @@
 						<tr>
 							<td><label>SiC SiC CMC: </label></td>
 							<td><input type="text" id="config_rotor_eff_sic_sic_cmc" value="1.2"></input></td>
-							<td><input type="text" id="config_rotor_exp_sic_sic_cmc" value="1.6"></input></td>
+							<td><input type="text" id="config_rotor_exp_sic_sic_cmc" value="1.8"></input></td>
 						</tr>
 						<tr>
 							<td><label>Stator: </label></td>
@@ -132,7 +138,7 @@
 						<tr>
 							<td><label>Silver:</label></div>
 							<td><input type="text" id="config_coil_eff_silver" value="1.12"></input></td>
-							<td><input type="text" id="config_coil_rule_silver" value="one gold && one silver"></input></td>
+							<td><input type="text" id="config_coil_rule_silver" value="one gold && one copper"></input></td>
 						</tr>
 					</table>
 					<button onclick="submitCoilConfig()">Update Coil Configuration</button>
@@ -190,6 +196,14 @@
 			</div>
 			<div class="flex__row">
 				<button onclick="submitOtherConfig()">Update Steam and Other Configuration</button>
+			</div>
+		</div>
+		<div id="options" class="justify" style="width: 1080px">
+			<div class="flex__row justify">
+				<button onclick="importSave()" class="optionsbtn">Import Save</button>
+				<button onclick="exportSave()" class="optionsbtn">Export Settings to Clipboard</button>
+				<button onclick="saveGame()" class="optionsbtn">Save Settings</button>
+				<button onclick="hardReset()" class="optionsbtn">Hard Reset</button>
 			</div>
 		</div>
 	</body>

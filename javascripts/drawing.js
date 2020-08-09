@@ -43,7 +43,7 @@ function drawTurbine(diameter, length) {
 	updateUIBlades();
 }
 
-function drawBearing(bearingDiameter) {
+function drawBearing(bearingDiameter, needRefresh = true) {
 	if (planner.diameter % 2 != bearingDiameter % 2 || bearingDiameter + 2 > planner.diameter) {
 		alert("Invalid Bearing Diameter");
 		return;
@@ -54,7 +54,7 @@ function drawBearing(bearingDiameter) {
 		for (let j = 1; j < planner.diameter + 1; j++) {
 			if (j >= start && j < start + bearingDiameter && i >= start && i < start + bearingDiameter) {
 				planner.coils[i - 1][j - 1] = "bearing";
-			} else {
+			} else if (needRefresh) {
 				planner.coils[i - 1][j - 1] = "none";
 			}
 		}
@@ -76,13 +76,22 @@ function drawDynamoCoils() {
 
 		if (i > 0 && i < planner.diameter + 1 && needRefresh) {
 			planner.coils[i - 1] = [];
-			activeCoils[i - 1] = [];
 		}
+		activeCoils[i - 1] = [];
 		for (let j = 0; j < planner.diameter + 2; j++) {
 			if (needRefresh) {
 				if (j > 0 && j < planner.diameter + 1 && i > 0 && i < planner.diameter + 1) {
 					planner.coils[i - 1][j - 1] = "none";
-					activeCoils[i - 1][j - 1] = false;
+				}
+				if ((planner.diameter % 2 == 0 && ((j == planner.diameter / 2 || j == (planner.diameter + 2) / 2)) && ((i == planner.diameter / 2 || i == (planner.diameter + 2) / 2))) || (planner.diameter % 2 == 1 && j == (planner.diameter + 1) / 2 && i == (planner.diameter + 1) /2)) {
+					planner.coils[i - 1][j - 1] = "bearing";
+				}
+			}
+			activeCoils[i - 1][j - 1] = false;
+
+			if (needRefresh) {
+				if (j > 0 && j < planner.diameter + 1 && i > 0 && i < planner.diameter + 1) {
+					planner.coils[i - 1][j - 1] = "none";
 				}
 				if ((planner.diameter % 2 == 0 && ((j == planner.diameter / 2 || j == (planner.diameter + 2) / 2)) && ((i == planner.diameter / 2 || i == (planner.diameter + 2) / 2))) || (planner.diameter % 2 == 1 && j == (planner.diameter + 1) / 2 && i == (planner.diameter + 1) /2)) {
 					planner.coils[i - 1][j - 1] = "bearing";

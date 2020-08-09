@@ -1,5 +1,8 @@
 function getDefaultData() {
 	return {
+		version: "1.12.2-2o.3.2",
+		plannerVersion: "0.4.0",
+
 		diameter: 3,
 		length: 3,
 		bearingDiameter: 1,
@@ -7,15 +10,32 @@ function getDefaultData() {
 		steam: 0,
 
 		rotors: [],
+		rotorTypes: {
+			steel: new TurbineBlade("steel", 1, 1.4, "Steel"),
+			extreme: new TurbineBlade("extreme", 1.1, 1.6, "Extreme"),
+			sic_sic_cmc: new TurbineBlade("sic_sic_cmc", 1.2, 1.8, "SiC SiC CMC"),
+			stator: new TurbineBlade("stator", 0, 0.75, "Stator")
+		},
 		activeRotor: "steel",
 
-		coils: [],
+		coils: [[]],
+		coilTypes: {
+			none: new DynamoCoil("none", 0, parseRules("four none coils"), "Turbine Casing" ),
+			bearing: new DynamoCoil("bearing", 0, parseRules("zero magnesium coils"), "Rotor Bearing"),
+			connector: new DynamoCoil("connector", 0, parseRules("one of any coil"), "Dynamo Coil Connector"),
+			magnesium: new DynamoCoil("magnesium", 0.86, parseRules("one bearing || one connector"), "Magnesium Dynamo Coil"),
+			beryllium: new DynamoCoil("beryllium", 0.9, parseRules("one magnesium coil"), "Beryllium Dynamo Coil"),
+			aluminum: new DynamoCoil("aluminum", 0.98, parseRules("two magnesium coils"), "Aluminum Dynamo Coil"),
+			gold: new DynamoCoil("gold", 1.04, parseRules("one aluminum coil"), "Gold Dynamo Coil"),
+			copper: new DynamoCoil("copper", 1.1, parseRules("one beryllium coil"), "Copper Dynamo Coil"),
+			silver: new DynamoCoil("silver", 1.12, parseRules("one gold coil && one copper coil"), "Silver Dynamo Coil")
+		},
 		activeCoil: "magnesium",
-		
+
 		customRotors: [],
-		
+
 		customCoils: [],
-		
+
 		config: {
 			turbine_power_per_mb: [16, 4, 4],
 			ideal_total_expansion_level: [4, 2, 2],
@@ -32,24 +52,6 @@ function getDefaultData() {
 var planner = getDefaultData();
 var activeCoils = [];
 
-const rotors = {
-	steel: new TurbineBlade("steel", 1, 1.4, "Steel"),
-	extreme: new TurbineBlade("extreme", 1.1, 1.6, "Extreme"),
-	sic_sic_cmc: new TurbineBlade("sic_sic_cmc", 1.2, 1.8, "SiC SiC CMC"),
-	stator: new TurbineBlade("stator", 0, 0.75, "Stator")
-};
-const coils = {
-	none: new DynamoCoil("none", 0, parseRules("four none coils"), "Turbine Casing" ),
-	bearing: new DynamoCoil("bearing", 0, parseRules("zero magnesium coils"), "Rotor Bearing"),
-	connector: new DynamoCoil("connector", 0, parseRules("one of any coil"), "Dynamo Coil Connector"),
-	magnesium: new DynamoCoil("magnesium", 0.86, parseRules("one bearing || one connector"), "Magnesium Dynamo Coil"),
-	beryllium: new DynamoCoil("beryllium", 0.9, parseRules("one magnesium coil"), "Beryllium Dynamo Coil"),
-	aluminum: new DynamoCoil("aluminum", 0.98, parseRules("two magnesium coils"), "Aluminum Dynamo Coil"),
-	gold: new DynamoCoil("gold", 1.04, parseRules("one aluminum coil"), "Gold Dynamo Coil"),
-	copper: new DynamoCoil("copper", 1.1, parseRules("one beryllium coil"), "Copper Dynamo Coil"),
-	silver: new DynamoCoil("silver", 1.12, parseRules("one gold coil && one copper coil"), "Silver Dynamo Coil")
-};
-
 function refreshTurbine() {
 	planner.rotors = [];
 	planner.coils = [];
@@ -64,11 +66,3 @@ function refreshTurbine() {
 function toFixed(x, dp) {
 	return Math.round(x * Math.pow(10, dp)) / Math.pow(10, dp);
 }
-
-document.getElementById("coils").style.display = "none";
-document.getElementById("config").style.display = "none";
-
-selectRotor("steel");
-selectCoil("magnesium");
-
-refreshTurbine();

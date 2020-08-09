@@ -1,28 +1,28 @@
 function submitRotorConfig() {
-	rotors["steel"].efficiency = parseFloat(document.getElementById("config_rotor_eff_steel").value);
-	rotors["extreme"].efficiency = parseFloat(document.getElementById("config_rotor_eff_extreme").value);
-	rotors["sic_sic_cmc"].efficiency = parseFloat(document.getElementById("config_rotor_eff_sic_sic_cmc").value);
+	planner.rotorTypes["steel"].efficiency = parseFloat(document.getElementById("config_rotor_eff_steel").value);
+	planner.rotorTypes["extreme"].efficiency = parseFloat(document.getElementById("config_rotor_eff_extreme").value);
+	planner.rotorTypes["sic_sic_cmc"].efficiency = parseFloat(document.getElementById("config_rotor_eff_sic_sic_cmc").value);
 	
-	rotors["steel"].expansion = parseFloat(document.getElementById("config_rotor_exp_steel").value);
-	rotors["extreme"].expansion = parseFloat(document.getElementById("config_rotor_exp_extreme").value);
-	rotors["sic_sic_cmc"].expansion = parseFloat(document.getElementById("config_rotor_exp_sic_sic_cmc").value);
-	rotors["stator"].expansion = parseFloat(document.getElementById("config_rotor_exp_stator").value);
+	planner.rotorTypes["steel"].expansion = parseFloat(document.getElementById("config_rotor_exp_steel").value);
+	planner.rotorTypes["extreme"].expansion = parseFloat(document.getElementById("config_rotor_exp_extreme").value);
+	planner.rotorTypes["sic_sic_cmc"].expansion = parseFloat(document.getElementById("config_rotor_exp_sic_sic_cmc").value);
+	planner.rotorTypes["stator"].expansion = parseFloat(document.getElementById("config_rotor_exp_stator").value);
 }
 
 function submitCoilConfig() {
-	coils["magnesium"].efficiency = parseFloat(document.getElementById("config_coil_eff_magnesium").value);
-	coils["beryllium"].efficiency = parseFloat(document.getElementById("config_coil_eff_beryllium").value);
-	coils["aluminum"].efficiency = parseFloat(document.getElementById("config_coil_eff_aluminum").value);
-	coils["gold"].efficiency = parseFloat(document.getElementById("config_coil_eff_gold").value);
-	coils["copper"].efficiency = parseFloat(document.getElementById("config_coil_eff_copper").value);
-	coils["silver"].efficiency = parseFloat(document.getElementById("config_coil_eff_silver").value);
+	planner.coilTypes["magnesium"].efficiency = parseFloat(document.getElementById("config_coil_eff_magnesium").value);
+	planner.coilTypes["beryllium"].efficiency = parseFloat(document.getElementById("config_coil_eff_beryllium").value);
+	planner.coilTypes["aluminum"].efficiency = parseFloat(document.getElementById("config_coil_eff_aluminum").value);
+	planner.coilTypes["gold"].efficiency = parseFloat(document.getElementById("config_coil_eff_gold").value);
+	planner.coilTypes["copper"].efficiency = parseFloat(document.getElementById("config_coil_eff_copper").value);
+	planner.coilTypes["silver"].efficiency = parseFloat(document.getElementById("config_coil_eff_silver").value);
 
-	coils["magnesium"].ruleSet = parseRules(document.getElementById("config_coil_rule_magnesium").value);
-	coils["beryllium"].ruleSet = parseRules(document.getElementById("config_coil_rule_beryllium").value);
-	coils["aluminum"].ruleSet = parseRules(document.getElementById("config_coil_rule_aluminum").value);
-	coils["gold"].ruleSet = parseRules(document.getElementById("config_coil_rule_gold").value);
-	coils["copper"].ruleSet = parseRules(document.getElementById("config_coil_rule_copper").value);
-	coils["silver"].ruleSet = parseRules(document.getElementById("config_coil_rule_silver").value);
+	planner.coilTypes["magnesium"].ruleSet = parseRules(document.getElementById("config_coil_rule_magnesium").value);
+	planner.coilTypes["beryllium"].ruleSet = parseRules(document.getElementById("config_coil_rule_beryllium").value);
+	planner.coilTypes["aluminum"].ruleSet = parseRules(document.getElementById("config_coil_rule_aluminum").value);
+	planner.coilTypes["gold"].ruleSet = parseRules(document.getElementById("config_coil_rule_gold").value);
+	planner.coilTypes["copper"].ruleSet = parseRules(document.getElementById("config_coil_rule_copper").value);
+	planner.coilTypes["silver"].ruleSet = parseRules(document.getElementById("config_coil_rule_silver").value);
 }
 
 function submitOtherConfig() {

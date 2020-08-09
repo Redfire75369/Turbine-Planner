@@ -1,8 +1,8 @@
 class TurbineBlade {
-	constructor(name, minEff, coeff, display) {
+	constructor(name, efficiency, expansion, display) {
 		this.name = name;
-	    this.efficiency = minEff;
-	    this.coefficientFactor = coeff;
+	    this.efficiency = efficiency;
+	    this.expansion = expansion;
 		this.displayName = display;
 	}
 }
@@ -39,7 +39,7 @@ function setCoil(x, y) {
 function activeDynamoCoils() {
 	for (let i = 1; i < planner.diameter + 1; i++) {
 		for (let j = 1; j < planner.diameter + 1; j++) {
-			activeCoils[j - 1][i - 1] = interpretRuleSet(coils[planner.coils[j - 1][i - 1]].ruleSet, i - 1, j - 1);
+			activeCoils[j - 1][i - 1] = interpretRuleSet(planner.coilTypes[planner.coils[j - 1][i - 1]].ruleSet, i - 1, j - 1);
 		}
 	}
 }

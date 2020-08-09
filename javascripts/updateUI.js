@@ -1,12 +1,12 @@
 function updateUIBlades() {
-	document.getElementById("rotor_eff_steel").innerText = (rotors["steel"].efficiency * 100).toFixed(2);
-	document.getElementById("rotor_eff_extreme").innerText = (rotors["extreme"].efficiency * 100).toFixed(2);
-	document.getElementById("rotor_eff_sic_sic_cmc").innerText = (rotors["sic_sic_cmc"].efficiency * 100).toFixed(2);
+	document.getElementById("rotor_eff_steel").innerText = (planner.rotorTypes["steel"].efficiency * 100).toFixed(2);
+	document.getElementById("rotor_eff_extreme").innerText = (planner.rotorTypes["extreme"].efficiency * 100).toFixed(2);
+	document.getElementById("rotor_eff_sic_sic_cmc").innerText = (planner.rotorTypes["sic_sic_cmc"].efficiency * 100).toFixed(2);
 
-	document.getElementById("rotor_exp_steel").innerText = (rotors["steel"].coefficientFactor * 100).toFixed(2);
-	document.getElementById("rotor_exp_extreme").innerText = (rotors["extreme"].coefficientFactor * 100).toFixed(2);
-	document.getElementById("rotor_exp_sic_sic_cmc").innerText = (rotors["sic_sic_cmc"].coefficientFactor * 100).toFixed(2);
-	document.getElementById("rotor_exp_stator").innerText = (rotors["stator"].coefficientFactor * 100).toFixed(2);
+	document.getElementById("rotor_exp_steel").innerText = (planner.rotorTypes["steel"].coefficientFactor * 100).toFixed(2);
+	document.getElementById("rotor_exp_extreme").innerText = (planner.rotorTypes["extreme"].coefficientFactor * 100).toFixed(2);
+	document.getElementById("rotor_exp_sic_sic_cmc").innerText = (planner.rotorTypes["sic_sic_cmc"].coefficientFactor * 100).toFixed(2);
+	document.getElementById("rotor_exp_stator").innerText = (planner.rotorTypes["stator"].coefficientFactor * 100).toFixed(2);
 	
 	let start = planner.diameter % 2 == 0 ? planner.diameter / 2 - (planner.bearingDiameter / 2) + 1 : (planner.diameter + 1) / 2 - (planner.bearingDiameter + 1) / 2 + 1;
 	for (let i = 1; i < planner.length + 1; i++) {
@@ -30,10 +30,10 @@ function updateUIBlades() {
 }
 
 function updateUICoils() {
-	for (let i = 0, ii = Object.keys(coils); i < ii.length; i++) {
+	for (let i = 0, ii = Object.keys(planner.coilTypes); i < ii.length; i++) {
 		if (ii[i] !== "none" && ii[i] !== "bearing" && ii[i] !== "connector") {
-			document.getElementById("coil_eff_" + ii[i]).innerText = (coils[ii[i]].efficiency * 100).toFixed(2);
-			document.getElementById("coil_rule_" + ii[i]).innerText = parseTooltip(coils[ii[i]].ruleSet);
+			document.getElementById("coil_eff_" + ii[i]).innerText = (planner.coilTypes[ii[i]].efficiency * 100).toFixed(2);
+			document.getElementById("coil_rule_" + ii[i]).innerText = parseTooltip(planner.coilTypes[ii[i]].ruleSet);
 		}
 	}
 
@@ -56,6 +56,7 @@ function updateUICoils() {
 function updateUIStats() {
 	document.getElementById("power").innerText = getTotalPower();
 	document.getElementById("steam").innerText = getMaxRecipeRate();
+	document.getElementById("effective_rf_per_mb").innerText = (getTotalPower() / getMaxRecipeRate()).toFixed(2);
 	document.getElementById("throughput_eff").innerText = getThroughputEfficiency().toFixed(2);
 	document.getElementById("rate_bonus").innerText = (1 + getMaxRecipeRate() / 691200).toFixed(2);
 	document.getElementById("rotor_eff").innerText = (getRotorEfficiency() * 100).toFixed(2);

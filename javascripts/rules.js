@@ -21,6 +21,13 @@ const numbers = {
 	"three": 3,
 	"four": 4
 };
+const reverseNumbers = {
+	0: "zero",
+	1: "one",
+	2: "two",
+	3: "three",
+	4: "four"
+};
 
 function parseRules(baseRule) {
 	baseRule = baseRule.toLowerCase();
@@ -56,6 +63,14 @@ function parseRules(baseRule) {
 	});
 	
 	return ruleSet;
+}
+
+function stringifyRules(rules) {
+	let output = "";
+	rules.ruleSet.forEach(function(rule) {
+		output += rule.type + " " + reverseNumbers[rule.amount] + " " + rule.requirement + "coils " + ruleSet.var;
+	});
+	return output;
 }
 
 function interpretRuleSet(ruleSet, x, y) {
@@ -155,9 +170,9 @@ function parseTooltip(ruleSet) {
 
 function parseSubTooltip(rule) {
 	if (rule.type == "exactly" && rule.amount == 0) {
-		return "absolutely zero " + coils[rule.requirement].displayName + "s";
+		return "absolutely zero " + planner.coilTypes[rule.requirement].displayName + "s";
 	}
-	let str = rule.type + " " + parsePrefix(rule.amount) + " " + coils[rule.requirement].displayName + parseSuffix(rule.amount);
+	let str = rule.type + " " + parsePrefix(rule.amount) + " " + planner.coilTypes[rule.requirement].displayName + parseSuffix(rule.amount);
 	if (rule.axial) {
 		str += " along a common axis";
 	}

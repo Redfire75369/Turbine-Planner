@@ -71,6 +71,15 @@ td {
 	border-radius: 4px;
 	margin: 2px;
 }
+.optionsbtn {
+	width: 240px;
+	height: 55px;
+	font-size: 20px;
+	color: #000000;
+	background-color: #fefefe;
+	border: 2px solid #181818;
+	border-radius: 2px;
+}
 
 #blades_row {
 	align-items: center;

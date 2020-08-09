@@ -9,7 +9,7 @@ function noBladeSets() {
 }
 
 function getBladeArea() {
-	return planner.bearingDiameter * (planner.diameter - planner.bearingDiameter);
+	return 2 * planner.bearingDiameter * (planner.diameter - planner.bearingDiameter);
 }
 function getVolume() {
 	return getBladeArea() * noBladeSets();
@@ -21,7 +21,7 @@ function getMaxRecipeRate() {
 function maxBladeExpansionCoefficient() {
 	let ret = 0
 	for (let i = 0; i < planner.rotors.length; i++) {
-		ret = Math.max(ret, rotors[planner.rotors[i]].coefficientFactor);
+		ret = Math.max(ret, planner.rotorTypes[planner.rotors[i]].expansion);
 	}
 	return ret;
 }
@@ -33,15 +33,15 @@ function getIdealExpansionLevel(depth) {
 function getExpansionLevel(depth) {
 	let totalExpansion = 1;
 	for (let i = 0; i < depth; i++) {
-		totalExpansion *= rotors[planner.rotors[i]].coefficientFactor;
+		totalExpansion *= planner.rotorTypes[planner.rotors[i]].expansion;
 	}
-	return totalExpansion * Math.sqrt(rotors[planner.rotors[depth]].coefficientFactor);
+	return totalExpansion * Math.sqrt(planner.rotorTypes[planner.rotors[depth]].expansion);
 }
 
 function getTotalExpansionLevel() {
 	let totalExpansion = 1;
 	for (let i = 0; i < planner.length; i++) {
-		totalExpansion *= rotors[planner.rotors[i]].coefficientFactor;
+		totalExpansion *= planner.rotorTypes[planner.rotors[i]].expansion;
 	}
 	return totalExpansion;
 }
@@ -60,7 +60,7 @@ function getExpansionIdealityMultiplier(ideal, actual) {
 function getRotorEfficiency() {
 	let rotorEff = 0;
 	for (let i = 0; i < planner.length; i++) {
-		rotorEff += rotors[planner.rotors[i]].efficiency * getExpansionIdealityMultiplier(getIdealExpansionLevel(i), getExpansionLevel(i));
+		rotorEff += planner.rotorTypes[planner.rotors[i]].efficiency * getExpansionIdealityMultiplier(getIdealExpansionLevel(i), getExpansionLevel(i));
 	}
 	return noBladeSets() == 0 ? 0 : rotorEff / noBladeSets();
 }
@@ -70,8 +70,8 @@ function getDynamoCoilEfficiency() {
 	let coilCount = 0;
 	for (let i = 1; i < planner.diameter + 1; i++) {
 		for (let j = 1; j < planner.diameter + 1; j++) {
-			if (coils[planner.coils[i - 1][j - 1]].efficiency > 0 && activeCoils[i - 1][j - 1]) {
-				coilEff += coils[planner.coils[i - 1][j - 1]].efficiency;
+			if (planner.coilTypes[planner.coils[i - 1][j - 1]].efficiency > 0 && activeCoils[i - 1][j - 1]) {
+				coilEff += planner.coilTypes[planner.coils[i - 1][j - 1]].efficiency;
 				coilCount++;
 			}
 		}
