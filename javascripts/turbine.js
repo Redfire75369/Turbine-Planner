@@ -35,6 +35,12 @@ function setCoil(x, y) {
 		activeDynamoCoils();
 	}
 }
+function removeCoil(x, y) {
+	if (planner.coils[y][x] != "bearing") {
+		planner.coils[y][x] = "none";
+		activeDynamoCoils();
+	}
+}
 
 function activeDynamoCoils() {
 	for (let i = 1; i < planner.diameter + 1; i++) {

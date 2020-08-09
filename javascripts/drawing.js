@@ -104,6 +104,11 @@ function drawDynamoCoils() {
 			if (!(j == 0 || j == planner.diameter + 1 || i == 0 || i == planner.diameter + 1)) {
 				if (j < start || j >= start + planner.bearingDiameter || i < start || i >= start + planner.bearingDiameter) {
 					coil.setAttribute("onclick", "setCoil(" + (i - 1) + ", " + (j - 1) + ")");
+					coil.addEventListener("contextmenu", function(ev) {
+						ev.preventDefault();
+						removeCoil(i - 1, j - 1);
+						return false;
+					}, false);
 				}
 			} else {
 				coil.setAttribute("class", "flex__row turbinebox turbinecasing small");
